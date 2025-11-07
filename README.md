@@ -25,13 +25,13 @@ Features:
 
 ## Tools and Technologies Used
 
-| Tool | Purpose |
-|------|----------|
-| **Kotlin** | Main programming language |
-| **Gradle** | Build automation |
-| **JUnit 5** | Unit testing framework |
-| **Git & GitHub** | Version control and hosting |
-| **IntelliJ** | IDE |
+| Tool | Purpose                     |
+|------|-----------------------------|
+| **Kotlin** | Main Programming Language   |
+| **Gradle** | Build Automation            |
+| **JUnit 5** | Unit Testing Framework      |
+| **Git & GitHub** | Version Control and Hosting |
+| **IntelliJ** | IDE                         |
 
 ---
 
@@ -39,5 +39,5 @@ Features:
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/your-username/video-game-play-tracker.git
-cd video-game-play-tracker
+git clone https://github.com/your-username/sw-sdt-assignment.git
+cd sw-sdt-assignment
