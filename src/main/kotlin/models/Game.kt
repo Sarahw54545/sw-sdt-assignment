@@ -16,27 +16,22 @@ data class Game (
     private var lastSessionId = 0
     private fun getNextSessionId() = lastSessionId++
 
+    fun numberOfSessions() = playSessions.size
+
     // Create - CRUD
     fun addSession(session: PlaySession): Boolean {
     session.sessionId = getNextSessionId()
         return playSessions.add(session)
     }
 
-    fun numberOfSessions() = playSessions.size
-
     // Read - CRUD
-    fun findOne(id: Int): PlaySession? {
+    fun findSession(id: Int): PlaySession? {
         return playSessions.find{ session -> session.sessionId == id}
-    }
-
-    // Delete - CRUD
-    fun delete(id: Int): Boolean {
-        return playSessions.removeIf { session -> session.sessionId == id}
     }
 
     // Update - CRUD
     fun update(id: Int, newSession: PlaySession): Boolean {
-        val foundSession = findOne(id)
+        val foundSession = findSession(id)
 
         if(foundSession != null) {
             foundSession.day = newSession.day
@@ -47,6 +42,11 @@ data class Game (
             return true
         }
         return false
+    }
+
+    // Delete - CRUD
+    fun delete(id: Int): Boolean {
+        return playSessions.removeIf { session -> session.sessionId == id}
     }
 
     // Formatting Listing Output
