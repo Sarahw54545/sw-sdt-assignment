@@ -1,5 +1,8 @@
 plugins {
     kotlin("jvm") version "2.2.10"
+    // Plugin for Dokka - KDoc generating tool
+    id("org.jetbrains.dokka") version "1.9.20"
+    application
 }
 
 group = "ie.setu"
@@ -11,6 +14,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    // For generating a Dokka Site from KDoc
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.9.20")
 }
 
 tasks.test {
