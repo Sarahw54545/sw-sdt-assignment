@@ -11,7 +11,6 @@ data class Game(
     var isOwned: Boolean = false,
     var releaseYear: Int,
 ) {
-
     // Formatting Listing Output
     override fun toString(): String {
         val owned = if (isOwned) "Yes" else "No"

@@ -2,11 +2,11 @@ package controllers
 import models.PlaySession
 
 class PlaySessionAPI(private val gameAPI: GameAPI) {
-
     private var playSessions = mutableListOf<PlaySession>()
 
     // Handling IDs for PlaySessions
     private var lastSessionId = 0
+
     private fun getNextSessionId() = lastSessionId++
 
     // Counting Methods
@@ -17,10 +17,26 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
 
     // CRUD
 
-    // Create - CRUD
+    // Create - CRUD (WIP)
     fun addSession(session: PlaySession): Boolean {
         session.id = getNextSessionId()
         return playSessions.add(session)
+    }
+
+    // Refactor needed
+    fun addSessionToGame(
+        sessionId: Int,
+        gameId: Int,
+    ): String {
+        val session = playSessions.find { it.id == sessionId }
+        if (session == null) {
+            return "Session with ID $sessionId doesn't exist"
+        } else if (gameAPI.gameExists(gameId) != null) {
+            return "Game with ID $gameId doesn't exist"
+        } else {
+            playSessions[playSessions.indexOf(session)] = session.copy(gameId = gameId)
+            return "Session $sessionId was moved to Game with ID $gameId"
+        }
     }
 
     // Read - CRUD
@@ -52,6 +68,4 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
     }
 
     // Listing Methods
-
-
 }

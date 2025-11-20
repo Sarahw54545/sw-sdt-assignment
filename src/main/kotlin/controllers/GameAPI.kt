@@ -6,7 +6,13 @@ class GameAPI() {
 
     // Handling IDs for Games
     private var lastId = 0
+
     private fun getId() = lastId++
+
+    // Check if game exists by comparing the IDs
+    fun gameExists(gameId: Int): Game? {
+        return games.find { it -> it.id == gameId }
+    }
 
     // For formatting the list of outputs
     private fun formatListString(gamesToFormat: List<Game>): String =
@@ -23,7 +29,7 @@ class GameAPI() {
     // Count number of games that are NOT owned
     fun numberOfUnownedGames() = games.count { game: Game -> !game.isOwned }
 
-    //CRUD
+    // CRUD
 
     // Create (Add) - CRUD
     fun add(game: Game): Boolean {
