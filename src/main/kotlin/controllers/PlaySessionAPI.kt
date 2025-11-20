@@ -31,7 +31,7 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
         val session = playSessions.find { it.id == sessionId }
         if (session == null) {
             return "Session with ID $sessionId doesn't exist"
-        } else if (gameAPI.gameExists(gameId) != null) {
+        } else if (gameAPI.findGame(gameId) != null) {
             return "Game with ID $gameId doesn't exist"
         } else {
             playSessions[playSessions.indexOf(session)] = session.copy(gameId = gameId)
