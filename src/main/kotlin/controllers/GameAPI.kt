@@ -6,28 +6,34 @@ class GameAPI() {
 
     // Handling IDs for Games
     private var lastId = 0
-
     private fun getId() = lastId++
 
+    // For formatting the list of outputs
     private fun formatListString(gamesToFormat: List<Game>): String =
         gamesToFormat
             .joinToString(separator = "/n") { game ->
                 games.indexOf(game).toString() + ": " + game.toString()
             }
 
+    // Count Methods
+
+    // Count number of games that are owned
     fun numberOfOwnedGames() = games.count { game: Game -> game.isOwned }
 
+    // Count number of games that are NOT owned
     fun numberOfUnownedGames() = games.count { game: Game -> !game.isOwned }
 
-    // Create - CRUD
+    //CRUD
+
+    // Create (Add) - CRUD
     fun add(game: Game): Boolean {
-        game.gameId = getId()
+        game.id = getId()
         return games.add(game)
     }
 
     // Read - CRUD
     fun findGame(id: Int): Game? {
-        return games.find { game -> game.gameId == id }
+        return games.find { game -> game.id == id }
     }
 
     // Update - CRUD
@@ -51,7 +57,9 @@ class GameAPI() {
     }
 
     // Delete - CRUD
-    fun delete(id: Int) = games.removeIf { game -> game.gameId == id }
+    fun delete(id: Int) = games.removeIf { game -> game.id == id }
+
+    // Listing Methods
 
     // Listing All Games
     fun listAllGames() =
