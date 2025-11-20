@@ -1,24 +1,23 @@
 package controllers
 import models.Game
-import models.PlaySession
 
 class GameAPI() {
     private var games = ArrayList<Game>()
 
     // Handling IDs for Games
     private var lastId = 0
+
     private fun getId() = lastId++
 
     private fun formatListString(gamesToFormat: List<Game>): String =
         gamesToFormat
-            .joinToString(separator = "/n") {game ->
-                games.indexOf(game).toString() + ": " + game.toString() }
+            .joinToString(separator = "/n") { game ->
+                games.indexOf(game).toString() + ": " + game.toString()
+            }
 
-    fun numberOfOwnedGames() =
-        games.count { game: Game -> game.isOwned}
+    fun numberOfOwnedGames() = games.count { game: Game -> game.isOwned }
 
-    fun numberOfUnownedGames() =
-        games.count { game: Game -> !game.isOwned}
+    fun numberOfUnownedGames() = games.count { game: Game -> !game.isOwned }
 
     // Create - CRUD
     fun add(game: Game): Boolean {
@@ -28,14 +27,17 @@ class GameAPI() {
 
     // Read - CRUD
     fun findGame(id: Int): Game? {
-        return games.find{ game -> game.gameId == id}
+        return games.find { game -> game.gameId == id }
     }
 
     // Update - CRUD
-    fun update(id: Int, game: Game?): Boolean {
+    fun update(
+        id: Int,
+        game: Game?,
+    ): Boolean {
         val foundGame = findGame(id)
 
-        if((foundGame != null) && (game !=null)) {
+        if ((foundGame != null) && (game != null)) {
             foundGame.name = game.name
             foundGame.genre = game.genre
             foundGame.platform = game.platform
@@ -49,20 +51,29 @@ class GameAPI() {
     }
 
     // Delete - CRUD
-    fun delete(id: Int) = games.removeIf {game -> game.gameId == id}
+    fun delete(id: Int) = games.removeIf { game -> game.gameId == id }
 
     // Listing All Games
     fun listAllGames() =
-        if (games.isEmpty()) "No Games Stored"
-        else formatListString(games)
+        if (games.isEmpty()) {
+            "No Games Stored"
+        } else {
+            formatListString(games)
+        }
 
-    //Listing Games That Are Owned
+    // Listing Games That Are Owned
     fun listOwnedGames() =
-        if (numberOfOwnedGames() == 0) "No Owned Games"
-    else formatListString(games.filter { game -> game.isOwned})
+        if (numberOfOwnedGames() == 0) {
+            "No Owned Games"
+        } else {
+            formatListString(games.filter { game -> game.isOwned })
+        }
 
     // Listing Games That Are Unowned
     fun listUnownedGames() =
-        if (numberOfUnownedGames() == 0) "No Unowned Games"
-        else formatListString(games.filter { game -> !game.isOwned})
+        if (numberOfUnownedGames() == 0) {
+            "No Unowned Games"
+        } else {
+            formatListString(games.filter { game -> !game.isOwned })
+        }
 }
