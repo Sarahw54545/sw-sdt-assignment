@@ -6,6 +6,7 @@ class GameAPI() {
 
     // Handling IDs for Games
     private var lastId = 0
+
     private fun getId() = lastId++
 
     // For formatting the list of outputs
@@ -17,7 +18,7 @@ class GameAPI() {
 
     // Count Methods
 
-    //Count total number of games
+    // Count total number of games
     fun numberOfGames() = games.size
 
     // Count number of games that are owned
@@ -29,7 +30,7 @@ class GameAPI() {
     // CRUD
 
     // Create (Add) - CRUD
-    fun add(game: Game): Boolean {
+    fun addGame(game: Game): Boolean {
         game.id = getId()
         return games.add(game)
     }
@@ -40,11 +41,11 @@ class GameAPI() {
     }
 
     // Update - CRUD
-    fun update(
-        id: Int,
+    fun updateGame(
+        idToUpdate: Int,
         game: Game?,
     ): Boolean {
-        val foundGame = findGame(id)
+        val foundGame = findGame(idToUpdate)
 
         if ((foundGame != null) && (game != null)) {
             foundGame.name = game.name
@@ -55,6 +56,7 @@ class GameAPI() {
             foundGame.publicRating = game.publicRating
             foundGame.isOwned = game.isOwned
             foundGame.releaseYear = game.releaseYear
+            return true
         }
         return false
     }

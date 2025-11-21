@@ -3,6 +3,7 @@ package controllers
 import models.Game
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -23,8 +24,10 @@ class GameAPITest {
         superMario =
             Game(
                 name = "Super Mario Bros",
-                genre = "Platformer", platform = "NES",
-                ageRating = "3+", price = 29.99,
+                genre = "Platformer",
+                platform = "NES",
+                ageRating = "3+",
+                price = 29.99,
                 publicRating = 9.4,
                 isOwned = true,
                 releaseYear = 1985,
@@ -79,11 +82,11 @@ class GameAPITest {
             )
 
         // Add 5 Games
-        populatedGames!!.add(superMario!!)
-        populatedGames!!.add(pokemonYellow!!)
-        populatedGames!!.add(minecraft!!)
-        populatedGames!!.add(marvelRivals!!)
-        populatedGames!!.add(redDead2!!)
+        populatedGames!!.addGame(superMario!!)
+        populatedGames!!.addGame(pokemonYellow!!)
+        populatedGames!!.addGame(minecraft!!)
+        populatedGames!!.addGame(marvelRivals!!)
+        populatedGames!!.addGame(redDead2!!)
     }
 
     @AfterEach
@@ -116,44 +119,143 @@ class GameAPITest {
 
     @Nested
     inner class AddGames {
-
         @Test
         fun `Adding a Game to a populated list adds to the Array`() {
-            val newGame = Game(
-                name = "Animal Crossing: New Leaf",
-                genre = "Simulation",
-                platform = "Nintendo 3DS",
-                ageRating = "3+",
-                price = 34.99,
-                publicRating = 9.0,
-                isOwned = true,
-                releaseYear = 2012
-            )
+            val newGame =
+                Game(
+                    name = "Animal Crossing: New Leaf",
+                    genre = "Simulation",
+                    platform = "Nintendo 3DS",
+                    ageRating = "3+",
+                    price = 34.99,
+                    publicRating = 9.0,
+                    isOwned = true,
+                    releaseYear = 2012,
+                )
 
             assertEquals(5, populatedGames!!.numberOfGames())
-            assertTrue(populatedGames!!.add(newGame))
+            assertTrue(populatedGames!!.addGame(newGame))
             assertEquals(6, populatedGames!!.numberOfGames())
             assertEquals(newGame, populatedGames!!.findGame(populatedGames!!.numberOfGames() - 1))
         }
 
         @Test
         fun `Adding a Game to an empty list adds to the Array`() {
-            val newGame = Game(
-                name = "Animal Crossing: New Leaf",
-                genre = "Simulation",
-                platform = "Nintendo 3DS",
-                ageRating = "3+",
-                price = 34.99,
-                publicRating = 9.0,
-                isOwned = true,
-                releaseYear = 2012
-            )
+            val newGame =
+                Game(
+                    name = "Animal Crossing: New Leaf",
+                    genre = "Simulation",
+                    platform = "Nintendo 3DS",
+                    ageRating = "3+",
+                    price = 34.99,
+                    publicRating = 9.0,
+                    isOwned = true,
+                    releaseYear = 2012,
+                )
             assertEquals(0, emptyGames!!.numberOfGames())
-            assertTrue(emptyGames!!.add(newGame))
+            assertTrue(emptyGames!!.addGame(newGame))
             assertEquals(1, emptyGames!!.numberOfGames())
             assertEquals(newGame, emptyGames!!.findGame(emptyGames!!.numberOfGames() - 1))
         }
     }
+
+    @Nested
+    inner class UpdateGames {
+        @Test
+        fun `Updating a game that doesn't exist returns false`() {
+            assertFalse(
+                populatedGames!!.updateGame(
+                    6,
+                    Game(
+                        6,
+                        "Updating Game",
+                        "Updating Genre",
+                        "Updating Platform",
+                        "Updating Age Rating",
+                        60.00,
+                        6.0,
+                        false,
+                        2000,
+                    ),
+                ),
+            )
+
+            assertFalse(
+                populatedGames!!.updateGame(
+                    -1,
+                    Game(
+                        -1,
+                        "Updating Game",
+                        "Updating Genre",
+                        "Updating Platform",
+                        "Updating Age Rating",
+                        60.00,
+                        6.0,
+                        false,
+                        2000,
+                    ),
+                ),
+            )
+
+            assertFalse(
+                emptyGames!!.updateGame(
+                    0,
+                    Game(
+                        0,
+                        "Updating Game",
+                        "Updating Genre",
+                        "Updating Platform",
+                        "Updating Age Rating",
+                        60.00,
+                        6.0,
+                        false,
+                        2000,
+                    ),
+                ),
+            )
+        }
+
+        @Test
+        fun `Updating a game that exists returns true and updates successfully`() {
+            assertEquals(superMario, populatedGames!!.findGame(0))
+            assertEquals("Super Mario Bros", populatedGames!!.findGame(0)!!.name)
+            assertEquals("Platformer", populatedGames!!.findGame(0)!!.genre)
+            assertEquals("NES", populatedGames!!.findGame(0)!!.platform)
+            assertEquals("3+", populatedGames!!.findGame(0)!!.ageRating)
+            assertEquals(29.99, populatedGames!!.findGame(0)!!.price)
+            assertEquals(9.4, populatedGames!!.findGame(0)!!.publicRating)
+            assertEquals(true, populatedGames!!.findGame(0)!!.isOwned)
+            assertEquals(1985, populatedGames!!.findGame(0)!!.releaseYear)
+
+            assertTrue(
+                populatedGames!!.updateGame(
+                    0,
+                    Game(
+                        0,
+                        "Updating Game",
+                        "Updating Genre",
+                        "Updating Platform",
+                        "Updating Age Rating",
+                        60.00,
+                        6.0,
+                        false,
+                        2000,
+                    ),
+                ),
+            )
+
+            assertEquals("Updating Game", populatedGames!!.findGame(0)!!.name)
+            assertEquals("Updating Genre", populatedGames!!.findGame(0)!!.genre)
+            assertEquals("Updating Platform", populatedGames!!.findGame(0)!!.platform)
+            assertEquals("Updating Age Rating", populatedGames!!.findGame(0)!!.ageRating)
+            assertEquals(60.00, populatedGames!!.findGame(0)!!.price)
+            assertEquals(6.0, populatedGames!!.findGame(0)!!.publicRating)
+            assertEquals(false, populatedGames!!.findGame(0)!!.isOwned)
+            assertEquals(2000, populatedGames!!.findGame(0)!!.releaseYear)
+        }
+    }
+
+
 
     @Nested
     inner class ListGames {
