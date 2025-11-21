@@ -33,7 +33,7 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
         gameId: Int,
         session: PlaySession,
     ): Boolean {
-        if(gameAPI.findGame(gameId) == null) return false
+        if (gameAPI.findGame(gameId) == null) return false
         session.id = getNextSessionId()
         session.gameId = gameId
 
@@ -76,10 +76,17 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
             formatListString(playSessions)
         }
 
-    fun listAllSessionsForGame(gameId: Int): String =
-        if (numberOfSessionsPerGame(gameId) == 0) {
-            "No Play Sessions for Game ID $gameId"
-        } else {
-            formatListString(playSessions.filter { it.gameId == gameId })
+    // Refactor with Lambdas
+    fun listAllSessionsForGame(gameId: Int): String {
+        if (gameAPI.findGame(gameId) == null) {
+            return "No Games Stored with ID $gameId"
         }
+
+        val sessionsForGame = playSessions.filter { it.gameId == gameId }
+        return if (sessionsForGame.isEmpty()) {
+            "No Play Sessions Stored for Game ID $gameId"
+        } else {
+            formatListString(sessionsForGame)
+        }
+    }
 }

@@ -326,4 +326,65 @@ class PlaySessionAPITest {
             assertEquals(3, populatedSessions!!.numberOfSessions())
         }
     }
+
+    @Nested
+    inner class ListingMethods {
+        @Nested
+        inner class ListAllSessions {
+            @Test
+            fun `ListAllSessions returns No Sessions Stored Message when Array is Empty`() {
+                assertEquals(0, emptySessions!!.numberOfSessions())
+                assertTrue(emptySessions!!.listAllSessions().lowercase().contains("no play sessions stored"))
+            }
+
+            @Test
+            fun `ListAllSessions returns Sessions when Array has Sessions Stored`() {
+                assertEquals(5, populatedSessions!!.numberOfSessions())
+                val sessionsString = populatedSessions!!.listAllSessions().lowercase()
+
+                assertTrue(sessionsString.contains("reached world 2-1"))
+                assertTrue(sessionsString.contains("caught pikachu"))
+                assertTrue(sessionsString.contains("built starter house"))
+                assertTrue(sessionsString.contains("explored a cave and found diamonds"))
+                assertTrue(sessionsString.contains("completed the main story"))
+            }
+        }
+
+        @Nested
+        inner class ListForGame {
+            @Test
+            fun `ListAllSessionForGame returns No Games Stored With This ID Message when Game ID is invalid`() {
+                assertEquals(0, emptySessions!!.numberOfSessions())
+                assertTrue(emptySessions!!.listAllSessionsForGame(-1).lowercase().contains("no games stored with id"))
+                assertTrue(emptySessions!!.listAllSessionsForGame(6).lowercase().contains("no games stored with id"))
+            }
+
+            @Test
+            fun `ListAllSessionForGame returns No Sessions Stored With This Game ID Message when Game exists with no sessions`() {
+                // Empty Sessions Array With Valid Game ID
+                assertEquals(0, emptySessions!!.numberOfSessions())
+                assertEquals(superMario, gameAPI!!.findGame(0))
+                assertTrue(emptySessions!!.listAllSessionsForGame(0).lowercase().contains("no play sessions stored for game id"))
+
+                // Marvel Rivals has 0 sessions
+                assertEquals(5, populatedSessions!!.numberOfSessions())
+                assertTrue(populatedSessions!!.listAllSessionsForGame(3).lowercase().contains("no play sessions stored for game id"))
+            }
+
+            @Test
+            fun `listAllSessionsForGame returns sessions for a specific game when sessions exist`() {
+                // Checking Mario Sessions (Should be 1)
+                val sessionsForMarioString = populatedSessions!!.listAllSessionsForGame(0).lowercase()
+                assertTrue(sessionsForMarioString.contains("reached world 2-1"))
+                assertFalse(sessionsForMarioString.contains("built starter house"))
+                assertFalse(sessionsForMarioString.contains("explored a cave and found diamonds"))
+
+                // Checking Sessions for Minecraft (Should be 2)
+                val sessionsForMinecraftString = populatedSessions!!.listAllSessionsForGame(2).lowercase()
+                assertFalse(sessionsForMinecraftString.contains("reached world 2-1"))
+                assertTrue(sessionsForMinecraftString.contains("built starter house"))
+                assertTrue(sessionsForMinecraftString.contains("explored a cave and found diamonds"))
+            }
+        }
+    }
 }
