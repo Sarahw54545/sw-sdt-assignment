@@ -7,7 +7,7 @@ data class PlaySession(
     var sessionRating: Double,
     var isGameFinished: Boolean = false,
     var notes: String?,
-    var gameId: Int,
+    var gameId: Int = -1,
 ) {
     // Formatting Listing Output (Can refactor)
     override fun toString() =

@@ -9,34 +9,35 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
 
     private fun getNextSessionId() = lastSessionId++
 
+    // For formatting the list of outputs
+    private fun formatListString(sessionsToFormat: List<PlaySession>): String =
+        sessionsToFormat
+            .joinToString(separator = "/n") { session ->
+                playSessions.indexOf(session).toString() + ": " + session.toString()
+            }
+
     // Counting Methods
 
     fun numberOfSessions(): Int {
         return playSessions.size
     }
 
-    // CRUD
-
-    // Create - CRUD (WIP)
-    fun addSession(session: PlaySession): Boolean {
-        session.id = getNextSessionId()
-        return playSessions.add(session)
+    fun numberOfSessionsPerGame(gameId: Int): Int {
+        return playSessions.count { it.gameId == gameId }
     }
 
-    // Refactor needed
+    // CRUD
+
+    // Create - CRUD (Refactor)
     fun addSessionToGame(
-        sessionId: Int,
         gameId: Int,
-    ): String {
-        val session = playSessions.find { it.id == sessionId }
-        if (session == null) {
-            return "Session with ID $sessionId doesn't exist"
-        } else if (gameAPI.findGame(gameId) != null) {
-            return "Game with ID $gameId doesn't exist"
-        } else {
-            playSessions[playSessions.indexOf(session)] = session.copy(gameId = gameId)
-            return "Session $sessionId was moved to Game with ID $gameId"
-        }
+        session: PlaySession,
+    ): Boolean {
+        if(gameAPI.findGame(gameId) == null) return false
+        session.id = getNextSessionId()
+        session.gameId = gameId
+
+        return playSessions.add(session)
     }
 
     // Read - CRUD
@@ -45,11 +46,11 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
     }
 
     // Update - CRUD
-    fun update(
-        id: Int,
+    fun updateSession(
+        idToUpdate: Int,
         newSession: PlaySession,
     ): Boolean {
-        val foundSession = findSession(id)
+        val foundSession = findSession(idToUpdate)
 
         if (foundSession != null) {
             foundSession.day = newSession.day
@@ -63,9 +64,22 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
     }
 
     // Delete - CRUD
-    fun delete(id: Int): Boolean {
-        return playSessions.removeIf { session -> session.id == id }
-    }
+    // Will search for session with ID to delete, if found also delete the session and return the deleted session object
+    fun deleteSession(idToDelete: Int) = findSession(idToDelete)?.also { playSessions.remove(it) }
 
     // Listing Methods
+
+    fun listAllSessions(): String =
+        if (playSessions.isEmpty()) {
+            "No Play Sessions Stored"
+        } else {
+            formatListString(playSessions)
+        }
+
+    fun listAllSessionsForGame(gameId: Int): String =
+        if (numberOfSessionsPerGame(gameId) == 0) {
+            "No Play Sessions for Game ID $gameId"
+        } else {
+            formatListString(playSessions.filter { it.gameId == gameId })
+        }
 }
