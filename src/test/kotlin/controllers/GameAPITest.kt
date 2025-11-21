@@ -4,8 +4,8 @@ import models.Game
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -256,42 +256,89 @@ class GameAPITest {
         }
     }
 
-@Nested
-inner class DeleteGames {
-    @Test
-    fun `deleting a Game that doesn't exist returns null`() {
-        assertNull(emptyGames!!.deleteGame(0))
-        assertNull(populatedGames!!.deleteGame(-1))
-        assertNull(populatedGames!!.deleteGame(5))
-    }
-
-    @Test
-    fun `deleting a Game that exists deletes successfully and returns deleted object`() {
-        assertEquals(5, populatedGames!!.numberOfGames())
-        assertEquals(redDead2, populatedGames!!.deleteGame(4))
-        assertEquals(4, populatedGames!!.numberOfGames())
-        assertEquals(superMario, populatedGames!!.deleteGame(0))
-        assertEquals(3, populatedGames!!.numberOfGames())
-    }
-}
-
     @Nested
-    inner class ListGames {
+    inner class DeleteGames {
         @Test
-        fun `listAllGames returns No Games Stored Message when Array is Empty`() {
-            assertEquals(0, emptyGames!!.numberOfGames())
-            assertTrue(emptyGames!!.listAllGames().lowercase().contains("no games"))
+        fun `deleting a Game that doesn't exist returns null`() {
+            assertNull(emptyGames!!.deleteGame(0))
+            assertNull(populatedGames!!.deleteGame(-1))
+            assertNull(populatedGames!!.deleteGame(5))
         }
 
         @Test
-        fun `listAllGames returns Games when Array has Games Stored`() {
+        fun `deleting a Game that exists deletes successfully and returns deleted object`() {
             assertEquals(5, populatedGames!!.numberOfGames())
-            val gamesString = populatedGames!!.listAllGames().lowercase()
-            assertTrue(gamesString.contains("super mario bros"))
-            assertTrue(gamesString.contains("pokemon yellow"))
-            assertTrue(gamesString.contains("minecraft"))
-            assertTrue(gamesString.contains("marvel rivals"))
-            assertTrue(gamesString.contains("red dead redemption 2"))
+            assertEquals(redDead2, populatedGames!!.deleteGame(4))
+            assertEquals(4, populatedGames!!.numberOfGames())
+            assertEquals(superMario, populatedGames!!.deleteGame(0))
+            assertEquals(3, populatedGames!!.numberOfGames())
+        }
+    }
+
+    @Nested
+    inner class ListingMethods {
+        @Nested
+        inner class ListAll {
+            @Test
+            fun `listAllGames returns No Games Stored Message when Array is Empty`() {
+                assertEquals(0, emptyGames!!.numberOfGames())
+                assertTrue(emptyGames!!.listAllGames().lowercase().contains("no games"))
+            }
+
+            @Test
+            fun `listAllGames returns Games when Array has Games Stored`() {
+                assertEquals(5, populatedGames!!.numberOfGames())
+                val gamesString = populatedGames!!.listAllGames().lowercase()
+                assertTrue(gamesString.contains("super mario bros"))
+                assertTrue(gamesString.contains("pokemon yellow"))
+                assertTrue(gamesString.contains("minecraft"))
+                assertTrue(gamesString.contains("marvel rivals"))
+                assertTrue(gamesString.contains("red dead redemption 2"))
+            }
+        }
+
+        @Nested
+        inner class ListOwnedGames {
+            // 3 Owned
+            @Test
+            fun `listOwnedGames Returns No Owned Games Message when Array is Empty`() {
+                assertEquals(0, emptyGames!!.numberOfOwnedGames())
+                assertTrue(emptyGames!!.listOwnedGames().lowercase().contains("no owned games"))
+            }
+
+            @Test
+            fun `ListOwnedGames Returns All Games that are Owned When There Are Owned Games Stored(isOwned = true)`() {
+                assertEquals(3, populatedGames!!.numberOfOwnedGames())
+
+                val ownedGamesString = populatedGames!!.listOwnedGames().lowercase()
+                assertTrue(ownedGamesString.contains("super mario bros"))
+                assertFalse(ownedGamesString.contains("pokemon yellow"))
+                assertTrue(ownedGamesString.contains("minecraft"))
+                assertTrue(ownedGamesString.contains("marvel rivals"))
+                assertFalse(ownedGamesString.contains("red dead redemption 2"))
+            }
+        }
+
+        @Nested
+        inner class ListUnOwnedGames {
+            // 2 Unowned
+            @Test
+            fun `listUnownedGames Returns No Unowned Games Message when Array is Empty`() {
+                assertEquals(0, emptyGames!!.numberOfUnownedGames())
+                assertTrue(emptyGames!!.listUnownedGames().lowercase().contains("no unowned games"))
+            }
+
+            @Test
+            fun `ListOwnedGames Returns All Games that are Unowned When There Are Unowned Games Stored(isOwned = false)`() {
+                assertEquals(2, populatedGames!!.numberOfUnownedGames())
+
+                val unownedGamesString = populatedGames!!.listUnownedGames().lowercase()
+                assertFalse(unownedGamesString.contains("super mario bros"))
+                assertTrue(unownedGamesString.contains("pokemon yellow"))
+                assertFalse(unownedGamesString.contains("minecraft"))
+                assertFalse(unownedGamesString.contains("marvel rivals"))
+                assertTrue(unownedGamesString.contains("red dead redemption 2"))
+            }
         }
     }
 }

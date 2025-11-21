@@ -63,7 +63,7 @@ class GameAPI() {
 
     // Delete - CRUD
     // Will search for game with ID to delete, if found also delete the game and return the deleted game object
-    fun deleteGame(idToDelete: Int) = findGame(idToDelete)?.also{ games.remove(it) }
+    fun deleteGame(idToDelete: Int) = findGame(idToDelete)?.also { games.remove(it) }
 
     // Listing Methods
 
