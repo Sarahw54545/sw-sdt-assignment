@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -255,7 +256,24 @@ class GameAPITest {
         }
     }
 
+@Nested
+inner class DeleteGames {
+    @Test
+    fun `deleting a Game that doesn't exist returns null`() {
+        assertNull(emptyGames!!.deleteGame(0))
+        assertNull(populatedGames!!.deleteGame(-1))
+        assertNull(populatedGames!!.deleteGame(5))
+    }
 
+    @Test
+    fun `deleting a Game that exists deletes successfully and returns deleted object`() {
+        assertEquals(5, populatedGames!!.numberOfGames())
+        assertEquals(redDead2, populatedGames!!.deleteGame(4))
+        assertEquals(4, populatedGames!!.numberOfGames())
+        assertEquals(superMario, populatedGames!!.deleteGame(0))
+        assertEquals(3, populatedGames!!.numberOfGames())
+    }
+}
 
     @Nested
     inner class ListGames {
