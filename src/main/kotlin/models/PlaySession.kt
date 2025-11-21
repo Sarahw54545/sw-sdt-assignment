@@ -8,20 +8,4 @@ data class PlaySession(
     var isGameFinished: Boolean = false,
     var notes: String?,
     var gameId: Int = -1,
-) {
-    // Formatting Listing Output (Can refactor)
-    override fun toString() =
-        if (isGameFinished) {
-            """$id: Game:$gameId (Completed)
-                |Day Played: $day
-                |Session Duration: $duration
-                |Session Rating: $sessionRating
-                |Notes: $notes""".trimMargin("|")
-        } else {
-            """$id: Game:$gameId (Not Completed)
-                |Day Played: $day
-                |Session Duration: $duration
-                |Session Rating: $sessionRating
-                |Notes: $notes""".trimMargin("|")
-        }
-}
+)
