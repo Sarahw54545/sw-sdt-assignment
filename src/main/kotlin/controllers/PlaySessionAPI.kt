@@ -12,7 +12,7 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
     // For formatting the list of outputs
     private fun formatListString(sessionsToFormat: List<PlaySession>): String =
         sessionsToFormat
-            .joinToString(separator = "/n") { session ->
+            .joinToString(separator = "\n") { session ->
                 playSessions.indexOf(session).toString() + ": " + session.toString()
             }
 

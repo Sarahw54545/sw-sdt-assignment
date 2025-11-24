@@ -30,21 +30,6 @@ fun readNextDouble(prompt: String?): Double {
     } while (true)
 }
 
-// Float
-
-fun readFloatNotNull() = readlnOrNull()?.toFloatOrNull() ?: -1
-
-fun readNextFloat(prompt: String?): Float {
-    do {
-        try {
-            print(prompt)
-            return readln().toFloat()
-        } catch (e: NumberFormatException) {
-            System.err.println("\tEnter a Number Please")
-        }
-    } while (true)
-}
-
 // String
 
 fun readNextLine(prompt: String?): String {
@@ -52,13 +37,24 @@ fun readNextLine(prompt: String?): String {
     return readln()
 }
 
-fun readNextChar(prompt: String?): Char {
+// Boolean
+
+fun readNextBoolean(prompt: String?): Boolean {
     do {
         try {
             print(prompt)
-            return readln().first()
+
+            return when (readln().trim().lowercase()) {
+                "y", "yes", "true", "t" -> true
+                "n", "no", "false", "f" -> false
+                else -> {
+                    System.err.println("\tEnter Yes/No (Y/N) or True/False Please")
+                    continue
+                    // 'continue' Needed as return type has to be a boolean (not just the error prompt string) reference: https://kotlinlang.org/docs/returns.html#break-and-continue-labels
+                }
+            }
         } catch (e: Exception) {
-            System.err.println("\tEnter a Character Please")
+            System.err.println("\tEnter Yes/No (Y/N) or True/False Please") // For other unexpected exceptions
         }
     } while (true)
 }

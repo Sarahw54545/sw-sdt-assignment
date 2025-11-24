@@ -1,5 +1,14 @@
+import controllers.GameAPI
+import controllers.PlaySessionAPI
+import models.Game
+import utils.readNextBoolean
+import utils.readNextDouble
 import utils.readNextInt
+import utils.readNextLine
 import java.lang.System.exit
+
+private val gameAPI = GameAPI()
+private val sessionAPI = PlaySessionAPI(gameAPI)
 
 fun mainMenu(): Int {
     print(
@@ -17,9 +26,9 @@ fun mainMenu(): Int {
           > --------------------------------------------
           > |   0) Exit                                 |
           > --------------------------------------------
-          > ==>> """.trimMargin(">"),
+          > """.trimMargin(">"),
     )
-    return readNextInt("> ==>>")
+    return readNextInt("> ==>> ")
 }
 
 fun runMenu() {
@@ -51,9 +60,9 @@ fun gamesMenu() {
           > ----------------------------------------
           > |   0) Back                             |
           > ----------------------------------------
-          > ==>> """.trimMargin(">")
+          > """.trimMargin(">"),
     )
-    when(readNextInt("> ==>")) {
+    when (readNextInt("> ==> ")) {
         1 -> addGame()
         2 -> listGames()
         3 -> updateGame()
@@ -64,15 +73,84 @@ fun gamesMenu() {
 }
 
 fun addGame() {
+    val name = readNextLine("Enter Game Name: ")
+    val genre = readNextLine("Enter Game Genre: ")
+    val platform = readNextLine("Enter Platform: ")
+    val ageRating = readNextLine("Enter Age Rating: ")
+    val price = readNextDouble("Enter Price: ")
+    val publicRating = readNextDouble("Enter Public Rating (0.1 - 10.0): ")
+    val isOwned = readNextBoolean("Is the Game Owned? (Y/N): ")
+    val releaseYear = readNextInt("Enter Release Year: ")
+
+    val isAdded =
+        gameAPI.addGame(
+            Game(
+                name = name,
+                genre = genre,
+                platform = platform,
+                ageRating = ageRating,
+                price = price,
+                publicRating = publicRating,
+                isOwned = isOwned,
+                releaseYear = releaseYear,
+            ),
+        )
+    println(if (isAdded) "Game Added Successfully" else "Add Failed")
 }
 
 fun listGames() {
+    if (gameAPI.numberOfGames() > 0) {
+        println(gameAPI.listAllGames())
+    } else {
+        println("Option Invalid - No Games Stored")
+    }
 }
 
 fun updateGame() {
+    if (gameAPI.numberOfGames() > 0) {
+        listGames()
+
+        val id = readNextInt("Enter the Game ID to Update: ")
+
+        val name = readNextLine("Enter New Game Name: ")
+        val genre = readNextLine("Enter New Game Genre: ")
+        val platform = readNextLine("Enter New Platform: ")
+        val ageRating = readNextLine("Enter New Age Rating: ")
+        val price = readNextDouble("Enter New Price: ")
+        val publicRating = readNextDouble("Enter New Public Rating (0.1 - 10.0): ")
+        val isOwned = readNextBoolean("Is the Game Owned? (Y/N): ")
+        val releaseYear = readNextInt("Enter New Release Year: ")
+
+        val updated =
+            gameAPI.updateGame(
+                id,
+                Game(
+                    name = name,
+                    genre = genre,
+                    platform = platform,
+                    ageRating = ageRating,
+                    price = price,
+                    publicRating = publicRating,
+                    isOwned = isOwned,
+                    releaseYear = releaseYear,
+                ),
+            )
+        println(if (updated) "Update Successful" else "Update Failed")
+    } else {
+        println("Option Invalid - No Games Stored")
+    }
 }
 
 fun deleteGame() {
+    if (gameAPI.numberOfGames() > 0) {
+        listGames()
+        val id = readNextInt("Enter ID of Game to Delete: ")
+        val deleted = gameAPI.deleteGame(id)
+
+        println(if (deleted != null) "Delete Successful! Deleted Game: ${deleted.name}" else "Delete Failed, Please Try Again")
+    } else {
+        println("Option Invalid - No Games Stored")
+    }
 }
 
 // Play Session Menu
@@ -90,9 +168,9 @@ fun sessionsMenu() {
           > ----------------------------------------
           > |   0) Back                             |
           > ----------------------------------------
-          > ==>> """.trimMargin(">")
+          > """.trimMargin(">"),
     )
-    when(readNextInt("> ==>>")) {
+    when (readNextInt("> ==>> ")) {
         1 -> addPlaySession()
         2 -> listSessionsForGame()
         3 -> updatePlaySession()
@@ -129,9 +207,9 @@ fun searchMenu() {
           > ----------------------------------------
           > |   0) Back                             |
           > ----------------------------------------
-          > ==>> """.trimMargin(">")
+          > """.trimMargin(">"),
     )
-    when(readNextInt("> ==>>")) {
+    when (readNextInt("> ==>> ")) {
         0 -> return
         else -> println("Invalid Option")
     }
