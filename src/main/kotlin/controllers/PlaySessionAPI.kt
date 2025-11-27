@@ -12,11 +12,16 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
     // For formatting the list of outputs
     private fun formatListString(sessionsToFormat: List<PlaySession>): String =
         sessionsToFormat
-            .joinToString(separator = "/n") { session ->
-                playSessions.indexOf(session).toString() + ": " + session.toString()
+            .joinToString(separator = "\n") { session ->
+                "${session.id}: " +
+                    "Day Played: ${session.day} | " +
+                    "Session Duration (Mins): ${session.duration} | " +
+                    "Session Rating: ${session.sessionRating} | " +
+                    "Game Completed: ${session.isGameFinished} | " +
+                    "Session Notes: ${session.notes}"
             }
 
-    // Counting Methods
+    // Count Methods
 
     fun numberOfSessions(): Int {
         return playSessions.size
@@ -65,6 +70,7 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
 
     // Delete - CRUD
     // Will search for session with ID to delete, if found also delete the session and return the deleted session object
+    // Reference: https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/also.html
     fun deleteSession(idToDelete: Int) = findSession(idToDelete)?.also { playSessions.remove(it) }
 
     // Listing Methods
@@ -78,10 +84,6 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
 
     // Refactor with Lambdas
     fun listAllSessionsForGame(gameId: Int): String {
-        if (gameAPI.findGame(gameId) == null) {
-            return "No Games Stored with ID $gameId"
-        }
-
         val sessionsForGame = playSessions.filter { it.gameId == gameId }
         return if (sessionsForGame.isEmpty()) {
             "No Play Sessions Stored for Game ID $gameId"
