@@ -14,11 +14,11 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
         sessionsToFormat
             .joinToString(separator = "\n") { session ->
                 "${session.id}: " +
-                        "Day Played: ${session.day} | " +
-                        "Session Duration (Mins): ${session.duration} | " +
-                        "Session Rating: ${session.sessionRating}"
-                        "Game Completed: ${session.isGameFinished} | " +
-                        "Session Notes: ${session.notes}"
+                    "Day Played: ${session.day} | " +
+                    "Session Duration (Mins): ${session.duration} | " +
+                    "Session Rating: ${session.sessionRating} | " +
+                    "Game Completed: ${session.isGameFinished} | " +
+                    "Session Notes: ${session.notes}"
             }
 
     // Count Methods
@@ -84,10 +84,6 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
 
     // Refactor with Lambdas
     fun listAllSessionsForGame(gameId: Int): String {
-        if (gameAPI.findGame(gameId) == null) {
-            return "No Games Stored with ID $gameId"
-        }
-
         val sessionsForGame = playSessions.filter { it.gameId == gameId }
         return if (sessionsForGame.isEmpty()) {
             "No Play Sessions Stored for Game ID $gameId"

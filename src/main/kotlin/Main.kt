@@ -1,6 +1,7 @@
 import controllers.GameAPI
 import controllers.PlaySessionAPI
 import models.Game
+import models.PlaySession
 import utils.readNextBoolean
 import utils.readNextDouble
 import utils.readNextInt
@@ -181,15 +182,100 @@ fun sessionsMenu() {
 }
 
 fun addPlaySession() {
+    if (gameAPI.numberOfGames() > 0) {
+        println(gameAPI.listAllGames())
+        val gameId = readNextInt("Enter the ID of the Game You Would Like to Add a Play Session To: ")
+
+        val game = gameAPI.findGame(gameId)
+
+        if (game == null) {
+            println("Game Not Found")
+        } else {
+            val day = readNextLine("Enter the Day you Played ${game.name}: ")
+            val duration = readNextInt("Enter the Duration of the Play Session (In Minutes): ")
+            val sessionRating = readNextDouble("Enter the Rating You Would Give The Session From 0.1 - 10: ")
+            val isGameFinished = readNextBoolean("Did You Complete ${game.name} In This Session: ")
+            val notes = readNextLine("Enter Any Extra Notes From the Session: ")
+
+            val isAdded =
+                sessionAPI.addSessionToGame(
+                    gameId,
+                    PlaySession(
+                        day = day,
+                        duration = duration,
+                        sessionRating = sessionRating,
+                        isGameFinished = isGameFinished,
+                        notes = notes,
+                    ),
+                )
+            println(if (isAdded) "Session Added Successfully" else "Add Failed")
+        }
+    } else {
+        println("No Games Added Yet - Please Add a Game First")
+    }
 }
 
 fun listSessionsForGame() {
+    if (gameAPI.numberOfGames() > 0) {
+        println(gameAPI.listAllGames())
+        val gameId = readNextInt("Enter the ID of the Game You Would Like to List Play Sessions For: ")
+
+        val game = gameAPI.findGame(gameId)
+        if (game == null) {
+            println("Game Not Found")
+        } else {
+            println("Play Sessions for ${game.name}\n${sessionAPI.listAllSessionsForGame(gameId)}")
+        }
+    } else {
+        println("No Games Added Yet - Please Add a Game First")
+    }
 }
 
 fun updatePlaySession() {
+    if (sessionAPI.numberOfSessions() > 0) {
+        println(sessionAPI.listAllSessions())
+
+        val sessionId = readNextInt("Enter The ID of the Play Session to Update: ")
+        val foundSession = sessionAPI.findSession(sessionId)
+
+        if (foundSession == null) {
+            println("No Session Found With ID: $sessionId")
+        } else {
+            val day = readNextLine("Enter New Day (Current: ${foundSession.day}): ")
+            val duration = readNextInt("Enter New Session Duration (Current: ${foundSession.duration}): ")
+            val sessionRating = readNextDouble("Enter New Session Rating (0.1 - 10) (Current: ${foundSession.sessionRating}):")
+            val isGameFinished = readNextBoolean("Did You Complete The Game In This Session (Current: ${foundSession.isGameFinished}): ")
+            val notes = readNextLine("Enter Any Extra Notes From The Session (Current: ${foundSession.notes}): ")
+
+            val updated =
+                sessionAPI.updateSession(
+                    sessionId,
+                    PlaySession(
+                        day = day,
+                        duration = duration,
+                        sessionRating = sessionRating,
+                        isGameFinished = isGameFinished,
+                        notes = notes,
+                    ),
+                )
+            println(if (updated) "Session was Updated Successfully" else "Update Failed")
+        }
+    } else {
+        println("No Play Sessions Added Yet - Please Add a Play Session To A Game First")
+    }
 }
 
 fun deletePlaySession() {
+    if (sessionAPI.numberOfSessions() > 0) {
+        println(sessionAPI.listAllSessions())
+
+        val id = readNextInt("Enter the ID of the Play Session to Delete: ")
+        val deleted = sessionAPI.deleteSession(id)
+
+        println(if (deleted != null) "Delete Successful! Deleted Session ID: ${deleted.id}" else "Delete Failed, Please Try Again")
+    } else {
+        println("Option Invalid - No Play Sessions Stored")
+    }
 }
 
 // Search Menu
