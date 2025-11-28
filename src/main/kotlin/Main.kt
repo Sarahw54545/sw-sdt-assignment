@@ -294,17 +294,39 @@ fun searchMenu() {
           > |           SEARCH / FILTER            |
           > ----------------------------------------
           > |   1) Search Games By Name            |
-          > |   2) Filter Games By Owned Status    |
-          > |   3) Filter Games By Genre           |
-          > |   4) Filter Games By Rating          |
+          > |   2) Filter Owned Games By Genre     |
           > ----------------------------------------
           > |   0) Back                             |
           > ----------------------------------------
           > """.trimMargin(">"),
     )
     when (readNextInt("> ==>> ")) {
+        1 -> searchGamesByName()
+        2 -> filterOwnedGamesByGenre()
         0 -> return
         else -> println("Invalid Option")
+    }
+}
+
+fun searchGamesByName() {
+    val input = readNextLine("Enter The Game Name to Search By: ")
+    val searchResults = gameAPI.searchByGameName(input)
+
+    if (searchResults.isEmpty()) {
+        println("No Games Found")
+    } else {
+        println(searchResults)
+    }
+}
+
+fun filterOwnedGamesByGenre() {
+    val genre = readValidGenre("Enter Genre: ")
+    val results = gameAPI.filterOwnedGamesByGenre(genre)
+
+    if (results.isEmpty()) {
+        println("No Owned Games Found For Genre: $genre")
+    } else {
+        println(results)
     }
 }
 

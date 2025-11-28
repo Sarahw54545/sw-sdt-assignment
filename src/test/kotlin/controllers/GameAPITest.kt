@@ -343,6 +343,62 @@ class GameAPITest {
                 assertTrue(unownedGamesString.contains("red dead redemption 2"))
             }
         }
+
+        @Nested
+        inner class SearchMethods {
+            @Test
+            fun `search games by name returns no games when no games of that name exist`() {
+                assertEquals(5, populatedGames!!.numberOfGames())
+                val searchResults = populatedGames!!.searchByGameName("no games expected")
+                assertTrue(searchResults.isEmpty())
+
+                assertEquals(0, emptyGames!!.numberOfGames())
+                assertTrue(searchResults.isEmpty())
+            }
+
+            @Test
+            fun `search games by name returns games when games with that name exist`() {
+                assertEquals(5, populatedGames!!.numberOfGames())
+
+                // Full title + case matches exactly
+                var searchResults = populatedGames!!.searchByGameName("Super Mario Bros")
+                assertTrue(searchResults.contains("Super Mario Bros"))
+                assertFalse(searchResults.contains("Minecraft"))
+
+                // Partial title
+                searchResults = populatedGames!!.searchByGameName("Ma")
+                assertTrue(searchResults.contains("Super Mario Bros"))
+                assertTrue(searchResults.contains("Marvel Rivals"))
+                assertFalse(searchResults.contains("Minecraft"))
+            }
+        }
+
+        @Nested
+        inner class FilterOwnedGamesByGenre {
+            @Test
+            fun `Owned Games of Matching Genre are Returned`() {
+                val results = populatedGames!!.filterOwnedGamesByGenre("Shooter")
+                assertTrue(results.lowercase().contains("marvel rivals"))
+                assertFalse(results.lowercase().contains("super mario bros"))
+                assertFalse(results.lowercase().contains("minecraft"))
+                assertFalse(results.lowercase().contains("pokemon yellow"))
+                assertFalse(results.lowercase().contains("red dead redemption 2"))
+            }
+
+            @Test
+            fun `Filtering owned games by genre returns no games when none match`() {
+                assertEquals(3, populatedGames!!.numberOfOwnedGames())
+                val results = populatedGames!!.filterOwnedGamesByGenre("RPG")
+                // Only Pokémon Yellow is an RPG but it is NOT owned, should return empty
+                assertTrue(results.isEmpty())
+            }
+
+            @Test
+            fun `Filtering owned games by genre returns no results when game list is empty`() {
+                val results = emptyGames!!.filterOwnedGamesByGenre("Action")
+                assertTrue(results.isEmpty())
+            }
+        }
     }
 
     @Nested
