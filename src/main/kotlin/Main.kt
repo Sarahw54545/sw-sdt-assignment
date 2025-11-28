@@ -2,6 +2,7 @@ import controllers.GameAPI
 import controllers.PlaySessionAPI
 import models.Game
 import models.PlaySession
+import persistence.JSONSerializer
 import persistence.XMLSerializer
 import utils.readNextBoolean
 import utils.readNextDouble
@@ -10,8 +11,8 @@ import utils.readNextLine
 import java.io.File
 import java.lang.System.exit
 
-private val gameAPI = GameAPI(XMLSerializer(File("games.xml")))
-private val sessionAPI = PlaySessionAPI(gameAPI, XMLSerializer(File("playSessions.xml")))
+private val gameAPI = GameAPI(JSONSerializer(File("games.json")))
+private val sessionAPI = PlaySessionAPI(gameAPI, JSONSerializer(File("playSessions.json")))
 
 fun mainMenu(): Int {
     print(
