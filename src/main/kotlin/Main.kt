@@ -295,8 +295,6 @@ fun searchMenu() {
           > ----------------------------------------
           > |   1) Search Games By Name            |
           > |   2) Filter Owned Games By Genre     |
-          > |   3) Filter Games By Genre           |
-          > |   4) Filter Games By Rating          |
           > ----------------------------------------
           > |   0) Back                             |
           > ----------------------------------------
