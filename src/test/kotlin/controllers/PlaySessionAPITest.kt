@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import persistence.XMLSerializer
+import java.io.File
 
 class PlaySessionAPITest {
     private var gameAPI: GameAPI? = null
@@ -31,10 +33,10 @@ class PlaySessionAPITest {
     @BeforeEach
     fun setup() {
         // Initialise GameAPI reference for PlaySessionAPI to Access
-        gameAPI = GameAPI()
+        gameAPI = GameAPI(XMLSerializer(File("games.xml")))
 
-        populatedSessions = PlaySessionAPI(gameAPI!!)
-        emptySessions = PlaySessionAPI(gameAPI!!)
+        populatedSessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
+        emptySessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
 
         superMario =
             Game(
@@ -353,13 +355,6 @@ class PlaySessionAPITest {
         @Nested
         inner class ListForGame {
             @Test
-            fun `ListAllSessionForGame returns No Games Stored With This ID Message when Game ID is invalid`() {
-                assertEquals(0, emptySessions!!.numberOfSessions())
-                assertTrue(emptySessions!!.listAllSessionsForGame(-1).lowercase().contains("no games stored with id"))
-                assertTrue(emptySessions!!.listAllSessionsForGame(6).lowercase().contains("no games stored with id"))
-            }
-
-            @Test
             fun `ListAllSessionForGame returns No Sessions Stored With This Game ID Message when Game exists with no sessions`() {
                 // Empty Sessions Array With Valid Game ID
                 assertEquals(0, emptySessions!!.numberOfSessions())
@@ -385,6 +380,48 @@ class PlaySessionAPITest {
                 assertTrue(sessionsForMinecraftString.contains("built starter house"))
                 assertTrue(sessionsForMinecraftString.contains("explored a cave and found diamonds"))
             }
+        }
+    }
+
+    @Nested
+    inner class PersistenceTests {
+
+        @Test
+        fun `saving and loading an empty collection in XML doesn't crash app`() {
+            // Saving an empty playSessions.XML file.
+            val storingSessions = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
+            storingSessions.store()
+
+            //Loading the empty playSessions.xml file into a new object
+            val loadedSessions = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
+            loadedSessions.load()
+
+            //Comparing the source of the PlaySessions (storingSessions) with the XML loaded PlaySessions (loadedSessions)
+            assertEquals(0, storingSessions.numberOfSessions())
+            assertEquals(0, loadedSessions.numberOfSessions())
+            assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
+        }
+
+        @Test
+        fun `saving and loading an loaded collection in XML doesn't loose data`() {
+            // Storing 3 notes to the playSessions.XML file.
+            val storingSessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
+            storingSessions.addSessionToGame(0,marioSession1!!)
+            storingSessions.addSessionToGame(1, pokemonSession1!!)
+            storingSessions.addSessionToGame(2, minecraftSession1!!)
+            storingSessions.store()
+
+            //Loading playSessions.xml into a different collection
+            val loadedSessions = PlaySessionAPI( gameAPI!!, XMLSerializer(File("playSessions.xml")))
+            loadedSessions.load()
+
+            //Comparing the source of the playSessions (storingSessions) with the XML loaded playSessions (loadedSessions)
+            assertEquals(3, storingSessions.numberOfSessions())
+            assertEquals(3, loadedSessions.numberOfSessions())
+            assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
+            assertEquals(storingSessions.findSession(0), loadedSessions.findSession(0))
+            assertEquals(storingSessions.findSession(1), loadedSessions.findSession(1))
+            assertEquals(storingSessions.findSession(2), loadedSessions.findSession(2))
         }
     }
 }

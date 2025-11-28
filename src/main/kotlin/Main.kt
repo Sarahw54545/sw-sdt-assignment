@@ -2,14 +2,16 @@ import controllers.GameAPI
 import controllers.PlaySessionAPI
 import models.Game
 import models.PlaySession
+import persistence.XMLSerializer
 import utils.readNextBoolean
 import utils.readNextDouble
 import utils.readNextInt
 import utils.readNextLine
+import java.io.File
 import java.lang.System.exit
 
-private val gameAPI = GameAPI()
-private val sessionAPI = PlaySessionAPI(gameAPI)
+private val gameAPI = GameAPI(XMLSerializer(File("games.xml")))
+private val sessionAPI = PlaySessionAPI(gameAPI, XMLSerializer(File("playSessions.xml")))
 
 fun mainMenu(): Int {
     print(
@@ -304,9 +306,21 @@ fun searchMenu() {
 // Persistence Menu
 
 fun save() {
+    try {
+        gameAPI.store()
+        sessionAPI.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
+    }
 }
 
 fun load() {
+    try {
+        gameAPI.load()
+        sessionAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
+    }
 }
 
 fun exitApp() {

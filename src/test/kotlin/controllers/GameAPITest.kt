@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import persistence.XMLSerializer
+import java.io.File
 
 class GameAPITest {
     private var superMario: Game? = null
@@ -17,8 +19,8 @@ class GameAPITest {
     private var marvelRivals: Game? = null
     private var redDead2: Game? = null
 
-    private var populatedGames: GameAPI? = GameAPI()
-    private var emptyGames: GameAPI? = GameAPI()
+    private var populatedGames: GameAPI? = GameAPI(XMLSerializer(File("games.xml")))
+    private var emptyGames: GameAPI? = GameAPI(XMLSerializer(File("empty-games.xml")))
 
     @BeforeEach
     fun setup() {
@@ -339,6 +341,47 @@ class GameAPITest {
                 assertFalse(unownedGamesString.contains("marvel rivals"))
                 assertTrue(unownedGamesString.contains("red dead redemption 2"))
             }
+        }
+    }
+
+    @Nested
+    inner class PersistenceTests {
+        @Test
+        fun `saving and loading an empty collection in XML doesn't crash app`() {
+            // Saving an empty notes.XML file.
+            val storingGames = GameAPI(XMLSerializer(File("games.xml")))
+            storingGames.store()
+
+            // Loading the empty notes.xml file into a new object
+            val loadedGames = GameAPI(XMLSerializer(File("games.xml")))
+            loadedGames.load()
+
+            // Comparing the source of the notes (storingNotes) with the XML loaded notes (loadedNotes)
+            assertEquals(0, storingGames.numberOfGames())
+            assertEquals(0, loadedGames.numberOfGames())
+            assertEquals(storingGames.numberOfGames(), loadedGames.numberOfGames())
+        }
+
+        @Test
+        fun `saving and loading an loaded collection in XML doesn't loose data`() {
+            // Storing 3 notes to the games.XML file.
+            val storingGames = GameAPI(XMLSerializer(File("games.xml")))
+            storingGames.addGame(superMario!!)
+            storingGames.addGame(pokemonYellow!!)
+            storingGames.addGame(minecraft!!)
+            storingGames.store()
+
+            // Loading games.xml into a different collection
+            val loadedGames = GameAPI(XMLSerializer(File("games.xml")))
+            loadedGames.load()
+
+            // Comparing the source of the games (storingGames) with the XML loaded games (loadedGames)
+            assertEquals(3, storingGames.numberOfGames())
+            assertEquals(3, loadedGames.numberOfGames())
+            assertEquals(storingGames.numberOfGames(), loadedGames.numberOfGames())
+            assertEquals(storingGames.findGame(0), loadedGames.findGame(0))
+            assertEquals(storingGames.findGame(1), loadedGames.findGame(1))
+            assertEquals(storingGames.findGame(2), loadedGames.findGame(2))
         }
     }
 }
