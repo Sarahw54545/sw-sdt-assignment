@@ -11,10 +11,12 @@ import persistence.Serializer
 class GameAPI(serializerType: Serializer) {
     /** The internal list of games managed by the API */
     private var games = ArrayList<Game>()
+
     /** The serializer used to read/write games to persistent storage */
     private var serializer: Serializer = serializerType
 
     // Handling IDs for Games
+
     /** The last ID assigned to a game. Used for auto-incrementing IDs. */
     private var lastId = 0
 
@@ -22,6 +24,7 @@ class GameAPI(serializerType: Serializer) {
     private fun getId() = lastId++
 
     // For formatting the list of outputs
+
     /**
      * Formats a list of games into a human-readable string.
      *
@@ -45,20 +48,24 @@ class GameAPI(serializerType: Serializer) {
     // Count Methods
 
     // Count total number of games
+
     /** Returns the total number of games in the system */
     fun numberOfGames() = games.size
 
     // Count number of games that are owned
+
     /** Returns the number of games marked as owned */
     fun numberOfOwnedGames() = games.count { game: Game -> game.isOwned }
 
     // Count number of games that are NOT owned
+
     /** Returns the number of games not owned */
     fun numberOfUnownedGames() = games.count { game: Game -> !game.isOwned }
 
     // CRUD
 
     // Create (Add) - CRUD
+
     /**
      * Adds a new game to the system.
      *
@@ -71,6 +78,7 @@ class GameAPI(serializerType: Serializer) {
     }
 
     // Read - CRUD
+
     /**
      * Finds a game by its unique ID.
      *
@@ -82,6 +90,7 @@ class GameAPI(serializerType: Serializer) {
     }
 
     // Update - CRUD
+
     /**
      * Updates an existing game's details.
      *
@@ -111,6 +120,7 @@ class GameAPI(serializerType: Serializer) {
 
     // Delete - CRUD
     // Will search for game with ID to delete, if found also delete the game and return the deleted game object
+
     /**
      * Deletes a game by its ID.
      *
@@ -122,6 +132,7 @@ class GameAPI(serializerType: Serializer) {
     // Listing Methods
 
     // Listing All Games
+
     /**
      * Lists all games in the system.
      *
@@ -135,6 +146,7 @@ class GameAPI(serializerType: Serializer) {
         }
 
     // Listing Games That Are Owned
+
     /**
      * Lists all owned games.
      *
@@ -148,6 +160,7 @@ class GameAPI(serializerType: Serializer) {
         }
 
     // Listing Games That Are Unowned
+
     /**
      * Lists all unowned games.
      *
