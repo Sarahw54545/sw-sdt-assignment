@@ -31,9 +31,15 @@ Features:
     - Day Played
     - Session Duration
     - Personal Rating of the Session
+- **Search and Filter**
+  - Search games by name
+  - Filter owned games by genre
 - Save and Load Data
   - Users can Save and Load Data in **JSON or XML** Format
   - Persistence Option can be Selected at Runtime Using the Built-In Menu
+- **Documentation**
+  - Full **KDoc comments** integrated, compatible with **Dokka** reports
+
 
 ---
 
@@ -77,9 +83,17 @@ All validated with TDD.
 
 ---
 
+## Using the App
+- Follow the Console Menus to Manage Games, Sessions and Persistence
+- Select JSON or XML for Saving / Loading Your Data at Runtime
+- Add Detailed Session Notes and Track Play Durations Efficiently
+
+---
+
 ## Running the Application  
 
 ### Clone the Repository
 ```bash
 git clone https://github.com/your-username/sw-sdt-assignment.git
 cd sw-sdt-assignment
+./gradlew run
