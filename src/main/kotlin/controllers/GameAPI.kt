@@ -110,4 +110,8 @@ class GameAPI(serializerType: Serializer) {
     fun store() {
         serializer.write(games)
     }
+
+    fun overrideSerializer(newSerializer: Serializer) {
+        serializer = newSerializer
+    }
 }

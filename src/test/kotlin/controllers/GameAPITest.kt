@@ -347,46 +347,46 @@ class GameAPITest {
 
     @Nested
     inner class PersistenceTests {
-//        @Nested
-//        inner class XMLTests {
-//            @Test
-//            fun `saving and loading an empty collection in XML doesn't crash app`() {
-//                // Saving an empty games.XML file.
-//                val storingGames = GameAPI(XMLSerializer(File("games.xml")))
-//                storingGames.store()
-//
-//                // Loading the empty games.xml file into a new object
-//                val loadedGames = GameAPI(XMLSerializer(File("games.xml")))
-//                loadedGames.load()
-//
-//                // Comparing the source of the games (storingGames) with the XML loaded games (loadedGames)
-//                assertEquals(0, storingGames.numberOfGames())
-//                assertEquals(0, loadedGames.numberOfGames())
-//                assertEquals(storingGames.numberOfGames(), loadedGames.numberOfGames())
-//            }
-//
-//            @Test
-//            fun `saving and loading an loaded collection in XML doesn't loose data`() {
-//                // Storing 3 notes to the games.XML file.
-//                val storingGames = GameAPI(XMLSerializer(File("games.xml")))
-//                storingGames.addGame(superMario!!)
-//                storingGames.addGame(pokemonYellow!!)
-//                storingGames.addGame(minecraft!!)
-//                storingGames.store()
-//
-//                // Loading games.xml into a different collection
-//                val loadedGames = GameAPI(XMLSerializer(File("games.xml")))
-//                loadedGames.load()
-//
-//                // Comparing the source of the games (storingGames) with the XML loaded games (loadedGames)
-//                assertEquals(3, storingGames.numberOfGames())
-//                assertEquals(3, loadedGames.numberOfGames())
-//                assertEquals(storingGames.numberOfGames(), loadedGames.numberOfGames())
-//                assertEquals(storingGames.findGame(0), loadedGames.findGame(0))
-//                assertEquals(storingGames.findGame(1), loadedGames.findGame(1))
-//                assertEquals(storingGames.findGame(2), loadedGames.findGame(2))
-//            }
-//        }
+        @Nested
+        inner class XMLTests {
+            @Test
+            fun `saving and loading an empty collection in XML doesn't crash app`() {
+                // Saving an empty games.XML file.
+                val storingGames = GameAPI(XMLSerializer(File("games.xml")))
+                storingGames.store()
+
+                // Loading the empty games.xml file into a new object
+                val loadedGames = GameAPI(XMLSerializer(File("games.xml")))
+                loadedGames.load()
+
+                // Comparing the source of the games (storingGames) with the XML loaded games (loadedGames)
+                assertEquals(0, storingGames.numberOfGames())
+                assertEquals(0, loadedGames.numberOfGames())
+                assertEquals(storingGames.numberOfGames(), loadedGames.numberOfGames())
+            }
+
+            @Test
+            fun `saving and loading an loaded collection in XML doesn't loose data`() {
+                // Storing 3 notes to the games.XML file.
+                val storingGames = GameAPI(XMLSerializer(File("games.xml")))
+                storingGames.addGame(superMario!!)
+                storingGames.addGame(pokemonYellow!!)
+                storingGames.addGame(minecraft!!)
+                storingGames.store()
+
+                // Loading games.xml into a different collection
+                val loadedGames = GameAPI(XMLSerializer(File("games.xml")))
+                loadedGames.load()
+
+                // Comparing the source of the games (storingGames) with the XML loaded games (loadedGames)
+                assertEquals(3, storingGames.numberOfGames())
+                assertEquals(3, loadedGames.numberOfGames())
+                assertEquals(storingGames.numberOfGames(), loadedGames.numberOfGames())
+                assertEquals(storingGames.findGame(0), loadedGames.findGame(0))
+                assertEquals(storingGames.findGame(1), loadedGames.findGame(1))
+                assertEquals(storingGames.findGame(2), loadedGames.findGame(2))
+            }
+        }
 
         @Nested
         inner class JSONTests {

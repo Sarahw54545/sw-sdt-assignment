@@ -103,4 +103,8 @@ class PlaySessionAPI(private val gameAPI: GameAPI, serializerType: Serializer) {
     fun store() {
         serializer.write(playSessions)
     }
+
+    fun overrideSerializer(newSerializer: Serializer) {
+        serializer = newSerializer
+    }
 }

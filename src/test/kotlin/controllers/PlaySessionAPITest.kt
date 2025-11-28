@@ -386,46 +386,46 @@ class PlaySessionAPITest {
 
     @Nested
     inner class PersistenceTests {
-//        @Nested
-//        inner class XMLTests {
-//            @Test
-//            fun `saving and loading an empty collection in XML doesn't crash app`() {
-//                // Saving an empty playSessions.XML file.
-//                val storingSessions = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
-//                storingSessions.store()
-//
-//                //Loading the empty playSessions.xml file into a new object
-//                val loadedSessions = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
-//                loadedSessions.load()
-//
-//                //Comparing the source of the PlaySessions (storingSessions) with the XML loaded PlaySessions (loadedSessions)
-//                assertEquals(0, storingSessions.numberOfSessions())
-//                assertEquals(0, loadedSessions.numberOfSessions())
-//                assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
-//            }
-//
-//            @Test
-//            fun `saving and loading an loaded collection in XML doesn't loose data`() {
-//                // Storing 3 notes to the playSessions.XML file.
-//                val storingSessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
-//                storingSessions.addSessionToGame(0,marioSession1!!)
-//                storingSessions.addSessionToGame(1, pokemonSession1!!)
-//                storingSessions.addSessionToGame(2, minecraftSession1!!)
-//                storingSessions.store()
-//
-//                //Loading playSessions.xml into a different collection
-//                val loadedSessions = PlaySessionAPI( gameAPI!!, XMLSerializer(File("playSessions.xml")))
-//                loadedSessions.load()
-//
-//                //Comparing the source of the playSessions (storingSessions) with the XML loaded playSessions (loadedSessions)
-//                assertEquals(3, storingSessions.numberOfSessions())
-//                assertEquals(3, loadedSessions.numberOfSessions())
-//                assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
-//                assertEquals(storingSessions.findSession(0), loadedSessions.findSession(0))
-//                assertEquals(storingSessions.findSession(1), loadedSessions.findSession(1))
-//                assertEquals(storingSessions.findSession(2), loadedSessions.findSession(2))
-//            }
-//        }
+        @Nested
+        inner class XMLTests {
+            @Test
+            fun `saving and loading an empty collection in XML doesn't crash app`() {
+                // Saving an empty playSessions.XML file.
+                val storingSessions = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
+                storingSessions.store()
+
+                //Loading the empty playSessions.xml file into a new object
+                val loadedSessions = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
+                loadedSessions.load()
+
+                //Comparing the source of the PlaySessions (storingSessions) with the XML loaded PlaySessions (loadedSessions)
+                assertEquals(0, storingSessions.numberOfSessions())
+                assertEquals(0, loadedSessions.numberOfSessions())
+                assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
+            }
+
+            @Test
+            fun `saving and loading an loaded collection in XML doesn't loose data`() {
+                // Storing 3 notes to the playSessions.XML file.
+                val storingSessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
+                storingSessions.addSessionToGame(0,marioSession1!!)
+                storingSessions.addSessionToGame(1, pokemonSession1!!)
+                storingSessions.addSessionToGame(2, minecraftSession1!!)
+                storingSessions.store()
+
+                //Loading playSessions.xml into a different collection
+                val loadedSessions = PlaySessionAPI( gameAPI!!, XMLSerializer(File("playSessions.xml")))
+                loadedSessions.load()
+
+                //Comparing the source of the playSessions (storingSessions) with the XML loaded playSessions (loadedSessions)
+                assertEquals(3, storingSessions.numberOfSessions())
+                assertEquals(3, loadedSessions.numberOfSessions())
+                assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
+                assertEquals(storingSessions.findSession(0), loadedSessions.findSession(0))
+                assertEquals(storingSessions.findSession(1), loadedSessions.findSession(1))
+                assertEquals(storingSessions.findSession(2), loadedSessions.findSession(2))
+            }
+        }
 
         @Nested
         inner class JSONTests {
