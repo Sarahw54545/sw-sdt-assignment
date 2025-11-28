@@ -303,8 +303,20 @@ fun searchMenu() {
           > """.trimMargin(">"),
     )
     when (readNextInt("> ==>> ")) {
+        1 -> searchGamesByName()
         0 -> return
         else -> println("Invalid Option")
+    }
+}
+
+fun searchGamesByName() {
+    val input = readNextLine("Enter The Game Name to Search By: ")
+    val searchResults = gameAPI.searchByGameName(input)
+
+    if (searchResults.isEmpty()) {
+        println("No Games Found")
+    } else {
+        println(searchResults)
     }
 }
 

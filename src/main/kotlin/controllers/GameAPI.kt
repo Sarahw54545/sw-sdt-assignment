@@ -115,4 +115,7 @@ class GameAPI(serializerType: Serializer) {
     fun overrideSerializer(newSerializer: Serializer) {
         serializer = newSerializer
     }
+
+    fun searchByGameName(searchString: String) =
+        formatListString(games.filter { game -> game.name.contains(searchString, ignoreCase = true) })
 }
