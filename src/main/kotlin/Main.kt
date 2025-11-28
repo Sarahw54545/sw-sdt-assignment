@@ -294,7 +294,7 @@ fun searchMenu() {
           > |           SEARCH / FILTER            |
           > ----------------------------------------
           > |   1) Search Games By Name            |
-          > |   2) Filter Games By Owned Status    |
+          > |   2) Filter Owned Games By Genre     |
           > |   3) Filter Games By Genre           |
           > |   4) Filter Games By Rating          |
           > ----------------------------------------
@@ -304,6 +304,7 @@ fun searchMenu() {
     )
     when (readNextInt("> ==>> ")) {
         1 -> searchGamesByName()
+        2 -> filterOwnedGamesByGenre()
         0 -> return
         else -> println("Invalid Option")
     }
@@ -317,6 +318,17 @@ fun searchGamesByName() {
         println("No Games Found")
     } else {
         println(searchResults)
+    }
+}
+
+fun filterOwnedGamesByGenre() {
+    val genre = readValidGenre("Enter Genre: ")
+    val results = gameAPI.filterOwnedGamesByGenre(genre)
+
+    if (results.isEmpty()) {
+        println("No Owned Games Found For Genre: $genre")
+    } else {
+        println(results)
     }
 }
 

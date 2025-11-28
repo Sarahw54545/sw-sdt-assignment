@@ -118,4 +118,12 @@ class GameAPI(serializerType: Serializer) {
 
     fun searchByGameName(searchString: String) =
         formatListString(games.filter { game -> game.name.contains(searchString, ignoreCase = true) })
+
+    fun filterOwnedGamesByGenre(genre: String): String {
+        val filteredGames = games.filter{ game ->
+            game.isOwned &&
+                    game.genre.equals(genre, ignoreCase = true)
+        }
+        return formatListString(filteredGames)
+    }
 }
