@@ -5,9 +5,13 @@ import models.PlaySession
 import persistence.JSONSerializer
 import persistence.XMLSerializer
 import utils.readNextBoolean
-import utils.readNextDouble
 import utils.readNextInt
 import utils.readNextLine
+import utils.readValidDay
+import utils.readValidGenre
+import utils.readValidPositiveDouble
+import utils.readValidPositiveInt
+import utils.readValidRating
 import java.io.File
 import java.lang.System.exit
 
@@ -78,13 +82,13 @@ fun gamesMenu() {
 
 fun addGame() {
     val name = readNextLine("Enter Game Name: ")
-    val genre = readNextLine("Enter Game Genre: ")
+    val genre = readValidGenre("Enter Game Genre: ")
     val platform = readNextLine("Enter Platform: ")
     val ageRating = readNextLine("Enter Age Rating: ")
-    val price = readNextDouble("Enter Price: ")
-    val publicRating = readNextDouble("Enter Public Rating (0.1 - 10.0): ")
+    val price = readValidPositiveDouble("Enter Price: ")
+    val publicRating = readValidRating("Enter Public Rating (0.1 - 10.0): ")
     val isOwned = readNextBoolean("Is the Game Owned? (Y/N): ")
-    val releaseYear = readNextInt("Enter Release Year: ")
+    val releaseYear = readValidPositiveInt("Enter Release Year: ")
 
     val isAdded =
         gameAPI.addGame(
@@ -117,13 +121,13 @@ fun updateGame() {
         val id = readNextInt("Enter the Game ID to Update: ")
 
         val name = readNextLine("Enter New Game Name: ")
-        val genre = readNextLine("Enter New Game Genre: ")
+        val genre = readValidGenre("Enter New Game Genre: ")
         val platform = readNextLine("Enter New Platform: ")
         val ageRating = readNextLine("Enter New Age Rating: ")
-        val price = readNextDouble("Enter New Price: ")
-        val publicRating = readNextDouble("Enter New Public Rating (0.1 - 10.0): ")
+        val price = readValidPositiveDouble("Enter New Price: ")
+        val publicRating = readValidRating("Enter New Public Rating (0.1 - 10.0): ")
         val isOwned = readNextBoolean("Is the Game Owned? (Y/N): ")
-        val releaseYear = readNextInt("Enter New Release Year: ")
+        val releaseYear = readValidPositiveInt("Enter New Release Year: ")
 
         val updated =
             gameAPI.updateGame(
@@ -194,9 +198,9 @@ fun addPlaySession() {
         if (game == null) {
             println("Game Not Found")
         } else {
-            val day = readNextLine("Enter the Day you Played ${game.name}: ")
-            val duration = readNextInt("Enter the Duration of the Play Session (In Minutes): ")
-            val sessionRating = readNextDouble("Enter the Rating You Would Give The Session From 0.1 - 10: ")
+            val day = readValidDay("Enter the Day you Played ${game.name}: ")
+            val duration = readValidPositiveInt("Enter the Duration of the Play Session (In Minutes): ")
+            val sessionRating = readValidRating("Enter the Rating You Would Give The Session From 0.1 - 10: ")
             val isGameFinished = readNextBoolean("Did You Complete ${game.name} In This Session: ")
             val notes = readNextLine("Enter Any Extra Notes From the Session: ")
 
@@ -244,9 +248,9 @@ fun updatePlaySession() {
         if (foundSession == null) {
             println("No Session Found With ID: $sessionId")
         } else {
-            val day = readNextLine("Enter New Day (Current: ${foundSession.day}): ")
-            val duration = readNextInt("Enter New Session Duration (Current: ${foundSession.duration}): ")
-            val sessionRating = readNextDouble("Enter New Session Rating (0.1 - 10) (Current: ${foundSession.sessionRating}):")
+            val day = readValidDay("Enter New Day (Current: ${foundSession.day}): ")
+            val duration = readValidPositiveInt("Enter New Session Duration (Current: ${foundSession.duration}): ")
+            val sessionRating = readValidRating("Enter New Session Rating (0.1 - 10) (Current: ${foundSession.sessionRating}):")
             val isGameFinished = readNextBoolean("Did You Complete The Game In This Session (Current: ${foundSession.isGameFinished}): ")
             val notes = readNextLine("Enter Any Extra Notes From The Session (Current: ${foundSession.notes}): ")
 
@@ -317,7 +321,7 @@ fun save() {
         > ----------------------------------------
         > |   0) Back                             |
         > ----------------------------------------
-        """.trimMargin(">")
+        """.trimMargin(">"),
     )
 
     val choice = readNextInt("> ==> ")
@@ -355,7 +359,7 @@ fun load() {
         > ----------------------------------------
         > |   0) Back                             |
         > ----------------------------------------
-        """.trimMargin(">")
+        """.trimMargin(">"),
     )
 
     val choice = readNextInt("> ==> ")

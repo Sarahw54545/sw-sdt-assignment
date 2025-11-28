@@ -391,14 +391,14 @@ class PlaySessionAPITest {
             @Test
             fun `saving and loading an empty collection in XML doesn't crash app`() {
                 // Saving an empty playSessions.XML file.
-                val storingSessions = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
+                val storingSessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
                 storingSessions.store()
 
-                //Loading the empty playSessions.xml file into a new object
-                val loadedSessions = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
+                // Loading the empty playSessions.xml file into a new object
+                val loadedSessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
                 loadedSessions.load()
 
-                //Comparing the source of the PlaySessions (storingSessions) with the XML loaded PlaySessions (loadedSessions)
+                // Comparing the source of the PlaySessions (storingSessions) with the XML loaded PlaySessions (loadedSessions)
                 assertEquals(0, storingSessions.numberOfSessions())
                 assertEquals(0, loadedSessions.numberOfSessions())
                 assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
@@ -408,16 +408,16 @@ class PlaySessionAPITest {
             fun `saving and loading an loaded collection in XML doesn't loose data`() {
                 // Storing 3 notes to the playSessions.XML file.
                 val storingSessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
-                storingSessions.addSessionToGame(0,marioSession1!!)
+                storingSessions.addSessionToGame(0, marioSession1!!)
                 storingSessions.addSessionToGame(1, pokemonSession1!!)
                 storingSessions.addSessionToGame(2, minecraftSession1!!)
                 storingSessions.store()
 
-                //Loading playSessions.xml into a different collection
-                val loadedSessions = PlaySessionAPI( gameAPI!!, XMLSerializer(File("playSessions.xml")))
+                // Loading playSessions.xml into a different collection
+                val loadedSessions = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
                 loadedSessions.load()
 
-                //Comparing the source of the playSessions (storingSessions) with the XML loaded playSessions (loadedSessions)
+                // Comparing the source of the playSessions (storingSessions) with the XML loaded playSessions (loadedSessions)
                 assertEquals(3, storingSessions.numberOfSessions())
                 assertEquals(3, loadedSessions.numberOfSessions())
                 assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
@@ -435,11 +435,11 @@ class PlaySessionAPITest {
                 val storingSessions = PlaySessionAPI(gameAPI!!, JSONSerializer(File("playSessions.json")))
                 storingSessions.store()
 
-                //Loading the empty playSessions.json file into a new object
-                val loadedSessions = PlaySessionAPI(gameAPI!!,JSONSerializer(File("playSessions.json")))
+                // Loading the empty playSessions.json file into a new object
+                val loadedSessions = PlaySessionAPI(gameAPI!!, JSONSerializer(File("playSessions.json")))
                 loadedSessions.load()
 
-                //Comparing the source of the PlaySessions (storingSessions) with the JSON loaded PlaySessions (loadedSessions)
+                // Comparing the source of the PlaySessions (storingSessions) with the JSON loaded PlaySessions (loadedSessions)
                 assertEquals(0, storingSessions.numberOfSessions())
                 assertEquals(0, loadedSessions.numberOfSessions())
                 assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
@@ -449,16 +449,16 @@ class PlaySessionAPITest {
             fun `saving and loading an loaded collection in XML doesn't loose data`() {
                 // Storing 3 notes to the playSessions.json file.
                 val storingSessions = PlaySessionAPI(gameAPI!!, JSONSerializer(File("playSessions.json")))
-                storingSessions.addSessionToGame(0,marioSession1!!)
+                storingSessions.addSessionToGame(0, marioSession1!!)
                 storingSessions.addSessionToGame(1, pokemonSession1!!)
                 storingSessions.addSessionToGame(2, minecraftSession1!!)
                 storingSessions.store()
 
-                //Loading playSessions.json into a different collection
-                val loadedSessions = PlaySessionAPI( gameAPI!!, JSONSerializer(File("playSessions.json")))
+                // Loading playSessions.json into a different collection
+                val loadedSessions = PlaySessionAPI(gameAPI!!, JSONSerializer(File("playSessions.json")))
                 loadedSessions.load()
 
-                //Comparing the source of the playSessions (storingSessions) with the JSON loaded playSessions (loadedSessions)
+                // Comparing the source of the playSessions (storingSessions) with the JSON loaded playSessions (loadedSessions)
                 assertEquals(3, storingSessions.numberOfSessions())
                 assertEquals(3, loadedSessions.numberOfSessions())
                 assertEquals(storingSessions.numberOfSessions(), loadedSessions.numberOfSessions())
@@ -470,15 +470,15 @@ class PlaySessionAPITest {
 
         @Test
         fun `switching serializer at runtime works`() {
-            val api = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
-            api.addSessionToGame(0,marioSession1!!)
+            val api = PlaySessionAPI(gameAPI!!, XMLSerializer(File("playSessions.xml")))
+            api.addSessionToGame(0, marioSession1!!)
             api.store()
 
-            //Switch from XML to JSON
+            // Switch from XML to JSON
             api.overrideSerializer(JSONSerializer(File("playSessions.json")))
             api.store()
 
-            val newApi = PlaySessionAPI(gameAPI!!,JSONSerializer(File("playSessions.json")))
+            val newApi = PlaySessionAPI(gameAPI!!, JSONSerializer(File("playSessions.json")))
             newApi.load()
             assertEquals(1, newApi.numberOfSessions())
             assertEquals(marioSession1!!, newApi.findSession(0))

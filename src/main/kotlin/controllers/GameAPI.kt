@@ -17,7 +17,8 @@ class GameAPI(serializerType: Serializer) {
             .joinToString(separator = "\n") { game ->
                 "${game.id}: " +
                     "${game.name} (${game.platform}) | " +
-                    "Rating: ${game.ageRating} | " +
+                    "Genre: ${game.genre} | " +
+                    "Age Rating: ${game.ageRating} | " +
                     "Price: \u20AC${"%.2f".format(game.price)} | " +
                     // Formats Price Output to 2 Decimal Places Reference: https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.text/format.html
                     "Public Rating: ${game.publicRating} | " +
