@@ -343,6 +343,35 @@ class GameAPITest {
                 assertTrue(unownedGamesString.contains("red dead redemption 2"))
             }
         }
+
+        @Nested
+        inner class SearchMethods {
+            @Test
+            fun `search games by name returns no games when no games of that name exist`() {
+                assertEquals(5, populatedGames!!.numberOfGames())
+                val searchResults = populatedGames!!.searchByGameName("no games expected")
+                assertTrue(searchResults.isEmpty())
+
+                assertEquals(0, emptyGames!!.numberOfGames())
+                assertTrue(searchResults.isEmpty())
+            }
+
+            @Test
+            fun `search games by name returns games when games with that name exist`() {
+                assertEquals(5, populatedGames!!.numberOfGames())
+
+                // Full title + case matches exactly
+                var searchResults = populatedGames!!.searchByGameName("Super Mario Bros")
+                assertTrue(searchResults.contains("Super Mario Bros"))
+                assertFalse(searchResults.contains("Minecraft"))
+
+                // Partial title
+                searchResults = populatedGames!!.searchByGameName("Ma")
+                assertTrue(searchResults.contains("Super Mario Bros"))
+                assertTrue(searchResults.contains("Marvel Rivals"))
+                assertFalse(searchResults.contains("Minecraft"))
+            }
+        }
     }
 
     @Nested
