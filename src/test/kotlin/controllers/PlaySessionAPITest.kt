@@ -467,5 +467,21 @@ class PlaySessionAPITest {
                 assertEquals(storingSessions.findSession(2), loadedSessions.findSession(2))
             }
         }
+
+        @Test
+        fun `switching serializer at runtime works`() {
+            val api = PlaySessionAPI(gameAPI!!,XMLSerializer(File("playSessions.xml")))
+            api.addSessionToGame(0,marioSession1!!)
+            api.store()
+
+            //Switch from XML to JSON
+            api.overrideSerializer(JSONSerializer(File("playSessions.json")))
+            api.store()
+
+            val newApi = PlaySessionAPI(gameAPI!!,JSONSerializer(File("playSessions.json")))
+            newApi.load()
+            assertEquals(1, newApi.numberOfSessions())
+            assertEquals(marioSession1!!, newApi.findSession(0))
+        }
     }
 }

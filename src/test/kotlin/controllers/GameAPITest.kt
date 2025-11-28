@@ -428,5 +428,21 @@ class GameAPITest {
                 assertEquals(storingGames.findGame(2), loadedGames.findGame(2))
             }
         }
+
+            @Test
+            fun `switching serializer at runtime works`() {
+                val api = GameAPI(XMLSerializer(File("games.xml")))
+                api.addGame(superMario!!)
+                api.store()
+
+                //Switch from XML to JSON
+                api.overrideSerializer(JSONSerializer(File("games.json")))
+                api.store()
+
+                val newApi = GameAPI(JSONSerializer(File("games.json")))
+                newApi.load()
+                assertEquals(1, newApi.numberOfGames())
+                assertEquals(superMario!!, newApi.findGame(0))
+            }
     }
 }
