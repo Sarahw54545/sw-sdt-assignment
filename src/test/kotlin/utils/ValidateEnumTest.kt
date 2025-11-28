@@ -9,7 +9,7 @@ class ValidateEnumTest {
     @Nested
     inner class GenreValidation {
         @Test
-        fun genresReturnsFullGenresSet(){
+        fun genresReturnsFullGenresSet() {
             assertEquals(11, genres.size)
             assertTrue(genres.contains("Action"))
             assertTrue(genres.contains("Adventure"))
@@ -32,6 +32,7 @@ class ValidateEnumTest {
             assertTrue(isValidGenre("RPG"))
             assertTrue(isValidGenre("pUzZle"))
         }
+
         @Test
         fun validGenreReturnFalse() {
             assertFalse(isValidGenre("Invalid"))
@@ -45,7 +46,7 @@ class ValidateEnumTest {
     @Nested
     inner class DayValidation {
         @Test
-        fun daysReturnsFullDaysSet(){
+        fun daysReturnsFullDaysSet() {
             assertEquals(7, daysOfWeek.size)
             assertTrue(daysOfWeek.contains("Monday"))
             assertTrue(daysOfWeek.contains("Tuesday"))
@@ -64,6 +65,7 @@ class ValidateEnumTest {
             assertTrue(isValidDay("TUESDAY"))
             assertTrue(isValidDay("wEdNEsDAY"))
         }
+
         @Test
         fun validGenreReturnFalse() {
             assertFalse(isValidDay("Invalid"))
