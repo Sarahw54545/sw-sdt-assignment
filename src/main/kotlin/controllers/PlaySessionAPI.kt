@@ -1,8 +1,10 @@
 package controllers
 import models.PlaySession
+import persistence.Serializer
 
-class PlaySessionAPI(private val gameAPI: GameAPI) {
+class PlaySessionAPI(private val gameAPI: GameAPI, serializerType: Serializer) {
     private var playSessions = mutableListOf<PlaySession>()
+    private var serializer: Serializer = serializerType
 
     // Handling IDs for PlaySessions
     private var lastSessionId = 0
@@ -90,5 +92,19 @@ class PlaySessionAPI(private val gameAPI: GameAPI) {
         } else {
             formatListString(sessionsForGame)
         }
+    }
+
+    @Throws(Exception::class)
+    fun load() {
+        playSessions = serializer.read() as ArrayList<PlaySession>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(playSessions)
+    }
+
+    fun overrideSerializer(newSerializer: Serializer) {
+        serializer = newSerializer
     }
 }

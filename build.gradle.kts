@@ -17,6 +17,11 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    // Dependency for streaming to XML + JSON: https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream
+    implementation("com.thoughtworks.xstream:xstream:1.4.18")
+    // https://mvnrepository.com/artifact/org.codehaus.jettison/jettison
+    implementation("org.codehaus.jettison:jettison:1.4.1")
+
     // For generating a Dokka Site from KDoc
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.9.20")
 }

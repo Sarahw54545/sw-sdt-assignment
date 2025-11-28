@@ -2,14 +2,17 @@ import controllers.GameAPI
 import controllers.PlaySessionAPI
 import models.Game
 import models.PlaySession
+import persistence.JSONSerializer
+import persistence.XMLSerializer
 import utils.readNextBoolean
 import utils.readNextDouble
 import utils.readNextInt
 import utils.readNextLine
+import java.io.File
 import java.lang.System.exit
 
-private val gameAPI = GameAPI()
-private val sessionAPI = PlaySessionAPI(gameAPI)
+private val gameAPI = GameAPI(JSONSerializer(File("games.json")))
+private val sessionAPI = PlaySessionAPI(gameAPI, JSONSerializer(File("playSessions.json")))
 
 fun mainMenu(): Int {
     print(
@@ -284,7 +287,7 @@ fun searchMenu() {
     print(
         """
           > ----------------------------------------
-          > |             SEARCH / FILTER           |
+          > |           SEARCH / FILTER            |
           > ----------------------------------------
           > |   1) Search Games By Name            |
           > |   2) Filter Games By Owned Status    |
@@ -304,9 +307,79 @@ fun searchMenu() {
 // Persistence Menu
 
 fun save() {
+    println(
+        """
+        > ----------------------------------------
+        > |         CHOOSE FORMAT TO SAVE         |
+        > ----------------------------------------
+        > |   1) JSON                             |
+        > |   2) XML                              |
+        > ----------------------------------------
+        > |   0) Back                             |
+        > ----------------------------------------
+        """.trimMargin(">")
+    )
+
+    val choice = readNextInt("> ==> ")
+
+    try {
+        when (choice) {
+            1 -> {
+                gameAPI.overrideSerializer(JSONSerializer(File("games.json")))
+                sessionAPI.overrideSerializer(JSONSerializer(File("playSessions.json")))
+            }
+            2 -> {
+                gameAPI.overrideSerializer(XMLSerializer(File("games.xml")))
+                sessionAPI.overrideSerializer(XMLSerializer(File("playSessions.xml")))
+            }
+            0 -> return
+            else -> {
+                println("Invalid Option")
+            }
+        }
+        gameAPI.store()
+        sessionAPI.store()
+    } catch (e: Exception) {
+        System.err.println("Error writing to file: $e")
+    }
 }
 
 fun load() {
+    println(
+        """
+        > ----------------------------------------
+        > |         CHOOSE FORMAT TO LOAD         |
+        > ----------------------------------------
+        > |   1) JSON                             |
+        > |   2) XML                              |
+        > ----------------------------------------
+        > |   0) Back                             |
+        > ----------------------------------------
+        """.trimMargin(">")
+    )
+
+    val choice = readNextInt("> ==> ")
+
+    try {
+        when (choice) {
+            1 -> {
+                gameAPI.overrideSerializer(JSONSerializer(File("games.json")))
+                sessionAPI.overrideSerializer(JSONSerializer(File("playSessions.json")))
+            }
+            2 -> {
+                gameAPI.overrideSerializer(XMLSerializer(File("games.xml")))
+                sessionAPI.overrideSerializer(XMLSerializer(File("playSessions.xml")))
+            }
+            0 -> return
+            else -> {
+                println("Invalid Option")
+            }
+        }
+        gameAPI.load()
+        sessionAPI.load()
+    } catch (e: Exception) {
+        System.err.println("Error reading from file: $e")
+    }
 }
 
 fun exitApp() {

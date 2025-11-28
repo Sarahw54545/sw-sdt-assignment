@@ -1,8 +1,10 @@
 package controllers
 import models.Game
+import persistence.Serializer
 
-class GameAPI() {
+class GameAPI(serializerType: Serializer) {
     private var games = ArrayList<Game>()
+    private var serializer: Serializer = serializerType
 
     // Handling IDs for Games
     private var lastId = 0
@@ -97,4 +99,19 @@ class GameAPI() {
         } else {
             formatListString(games.filter { game -> !game.isOwned })
         }
+
+    // Persistence Methods
+    @Throws(Exception::class)
+    fun load() {
+        games = serializer.read() as ArrayList<Game>
+    }
+
+    @Throws(Exception::class)
+    fun store() {
+        serializer.write(games)
+    }
+
+    fun overrideSerializer(newSerializer: Serializer) {
+        serializer = newSerializer
+    }
 }
