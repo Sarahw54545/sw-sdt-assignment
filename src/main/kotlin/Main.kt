@@ -15,9 +15,19 @@ import utils.readValidRating
 import java.io.File
 import java.lang.System.exit
 
+/**
+ * The primary Game Tracker application, responsible for handling menus,
+ * reading user input, and delegating actions to the `GameAPI` and `PlaySessionAPI`.
+ */
+
 private val gameAPI = GameAPI(JSONSerializer(File("games.json")))
 private val sessionAPI = PlaySessionAPI(gameAPI, JSONSerializer(File("playSessions.json")))
 
+/**
+ * Displays the main menu to the user and reads the selected option.
+ *
+ * @return the integer option selected by the user.
+ */
 fun mainMenu(): Int {
     print(
         """
@@ -39,6 +49,10 @@ fun mainMenu(): Int {
     return readNextInt("> ==>> ")
 }
 
+/**
+ * Runs the main application loop. The menu is repeatedly displayed until the
+ * user chooses to exit. All high-level navigation branches from this function.
+ */
 fun runMenu() {
     do {
         when (val option = mainMenu()) {
@@ -55,6 +69,10 @@ fun runMenu() {
 
 // Games Menu
 
+/**
+ * Displays the Games menu and routes the user's selection
+ * to the appropriate Game management operation.
+ */
 fun gamesMenu() {
     print(
         """
@@ -80,6 +98,22 @@ fun gamesMenu() {
     }
 }
 
+/**
+ * Reads user input to create a new [Game] and attempts to add it
+ * to the persistent store through the [GameAPI].
+ *
+ * Prompts the user for:
+ * - name
+ * - genre
+ * - platform
+ * - age rating
+ * - price
+ * - public rating
+ * - ownership status
+ * - release year
+ *
+ * Prints whether the operation succeeded.
+ */
 fun addGame() {
     val name = readNextLine("Enter Game Name: ")
     val genre = readValidGenre("Enter Game Genre: ")
@@ -106,6 +140,10 @@ fun addGame() {
     println(if (isAdded) "Game Added Successfully" else "Add Failed")
 }
 
+/**
+ * Prints all stored games, if any exist.
+ * If none are stored, a message is displayed indicating that no games are available.
+ */
 fun listGames() {
     if (gameAPI.numberOfGames() > 0) {
         println(gameAPI.listAllGames())
@@ -114,6 +152,12 @@ fun listGames() {
     }
 }
 
+/**
+ * Prompts the user to select an existing game by ID and enter new values
+ * for all editable fields. Attempts to update the game via the [GameAPI].
+ *
+ * Prints whether the update was successful.
+ */
 fun updateGame() {
     if (gameAPI.numberOfGames() > 0) {
         listGames()
@@ -149,6 +193,11 @@ fun updateGame() {
     }
 }
 
+/**
+ * Allows the user to delete a game by its ID.
+ * If the game exists, it is removed and the deleted game's name is printed.
+ * If it does not exist, an error message is shown.
+ */
 fun deleteGame() {
     if (gameAPI.numberOfGames() > 0) {
         listGames()
@@ -163,6 +212,10 @@ fun deleteGame() {
 
 // Play Session Menu
 
+/**
+ * Displays the Play Sessions menu and routes the user's selection
+ * to the appropriate session management operation.
+ */
 fun sessionsMenu() {
     print(
         """
@@ -188,6 +241,12 @@ fun sessionsMenu() {
     }
 }
 
+/**
+ * Reads user input to add a new [PlaySession] to a selected [Game].
+ * Prompts for day, duration, session rating, completion status, and notes.
+ *
+ * Prints whether the addition was successful.
+ */
 fun addPlaySession() {
     if (gameAPI.numberOfGames() > 0) {
         println(gameAPI.listAllGames())
@@ -222,6 +281,10 @@ fun addPlaySession() {
     }
 }
 
+/**
+ * Lists all play sessions for a selected [Game].
+ * If the game or sessions do not exist, appropriate messages are displayed.
+ */
 fun listSessionsForGame() {
     if (gameAPI.numberOfGames() > 0) {
         println(gameAPI.listAllGames())
@@ -238,6 +301,11 @@ fun listSessionsForGame() {
     }
 }
 
+/**
+ * Updates an existing [PlaySession] based on user input.
+ * Prompts for new day, duration, rating, completion status, and notes.
+ * Displays messages based on success or failure.
+ */
 fun updatePlaySession() {
     if (sessionAPI.numberOfSessions() > 0) {
         println(sessionAPI.listAllSessions())
@@ -272,6 +340,10 @@ fun updatePlaySession() {
     }
 }
 
+/**
+ * Deletes a [PlaySession] by its ID.
+ * Prints confirmation of deletion or failure.
+ */
 fun deletePlaySession() {
     if (sessionAPI.numberOfSessions() > 0) {
         println(sessionAPI.listAllSessions())
@@ -287,6 +359,10 @@ fun deletePlaySession() {
 
 // Search Menu
 
+/**
+ * Displays the Search / Filter menu and routes user input
+ * to either searching games by name or filtering owned games by genre.
+ */
 fun searchMenu() {
     print(
         """
@@ -308,6 +384,10 @@ fun searchMenu() {
     }
 }
 
+/**
+ * Searches stored games by name based on user input.
+ * Prints matching games or a message if none are found.
+ */
 fun searchGamesByName() {
     val input = readNextLine("Enter The Game Name to Search By: ")
     val searchResults = gameAPI.searchByGameName(input)
@@ -319,6 +399,10 @@ fun searchGamesByName() {
     }
 }
 
+/**
+ * Filters all owned games by a user-specified genre.
+ * Prints the matching games or a message if none are found.
+ */
 fun filterOwnedGamesByGenre() {
     val genre = readValidGenre("Enter Genre: ")
     val results = gameAPI.filterOwnedGamesByGenre(genre)
@@ -332,6 +416,10 @@ fun filterOwnedGamesByGenre() {
 
 // Persistence Menu
 
+/**
+ * Saves games and play sessions to JSON or XML based on user selection.
+ * Overrides the serializers used in [GameAPI] and [PlaySessionAPI] accordingly.
+ */
 fun save() {
     println(
         """
@@ -370,6 +458,10 @@ fun save() {
     }
 }
 
+/**
+ * Loads games and play sessions from JSON or XML based on user selection.
+ * Overrides the serializers used in [GameAPI] and [PlaySessionAPI] accordingly.
+ */
 fun load() {
     println(
         """
@@ -408,11 +500,17 @@ fun load() {
     }
 }
 
+/**
+ * Exits the application gracefully, printing a farewell message.
+ */
 fun exitApp() {
     println("Exiting... happy gaming!!")
     exit(0)
 }
 
+/**
+ * Entry point for the application. Starts the main menu loop.
+ */
 fun main() {
     runMenu()
 }

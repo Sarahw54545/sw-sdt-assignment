@@ -1,5 +1,11 @@
 package utils
 
+/**
+ * Reads an integer from the user and ensures it is positive (>= 0).
+ *
+ * @param prompt the message to display to the user
+ * @return a validated positive integer
+ */
 fun readValidPositiveInt(prompt: String): Int {
     var input = readNextInt(prompt)
 
@@ -13,6 +19,12 @@ fun readValidPositiveInt(prompt: String): Int {
     } while (true)
 }
 
+/**
+ * Reads a double from the user and ensures it is positive (>= 0.0).
+ *
+ * @param prompt the message to display to the user
+ * @return a validated positive double
+ */
 fun readValidPositiveDouble(prompt: String): Double {
     var input = readNextDouble(prompt)
 
@@ -26,6 +38,12 @@ fun readValidPositiveDouble(prompt: String): Double {
     } while (true)
 }
 
+/**
+ * Reads a double from the user and ensures it is within the valid rating range 0.1 to 10.0.
+ *
+ * @param prompt the message to display to the user
+ * @return a validated rating double
+ */
 fun readValidRating(prompt: String): Double {
     var input = readNextDouble(prompt)
     do {
@@ -38,6 +56,12 @@ fun readValidRating(prompt: String): Double {
     } while (true)
 }
 
+/**
+ * Reads a string from the user and ensures it matches a valid genre.
+ *
+ * @param prompt the message to display to the user
+ * @return a validated genre string
+ */
 fun readValidGenre(prompt: String?): String {
     var input = readNextLine(prompt)
     do {
@@ -52,6 +76,12 @@ fun readValidGenre(prompt: String?): String {
     } while (true)
 }
 
+/**
+ * Reads a string from the user and ensures it matches a valid day of the week.
+ *
+ * @param prompt the message to display to the user
+ * @return a validated day string
+ */
 fun readValidDay(prompt: String?): String {
     var input = readNextLine(prompt)
     do {
